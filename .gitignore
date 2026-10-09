@@ -6,6 +6,7 @@ __pycache__/
 .env.*
 data/raw/
 *.parquet
+!data/calibration_daily_fez.parquet
 *.arrow
 figures/*.pdf
 .DS_Store

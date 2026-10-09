@@ -264,6 +264,7 @@ def p_depth_2q():
     for d, qc, c in zip(depths, circs, counts):
         curve.append({"depth": d, "n2q_submitted": two_q_count(qc), "p_target": round(frac(c, "00"), 4)})
     R["depth_curve_2q"] = curve
+    R["depth_curve"] = curve
     R["p2q_fit"] = fit_depolarising([(pt["n2q_submitted"], pt["p_target"]) for pt in curve], 0.25,
                                     p_other=R.get("p1q_fit") or 0.0, gates_other_per_n=2)
     _, jmax = submit(circs[-1])

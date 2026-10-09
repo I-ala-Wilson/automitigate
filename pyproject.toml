@@ -13,13 +13,13 @@ requires-python = ">=3.11"
 dependencies = [
   "qiskit>=2.5.2,<3",
   "numpy",
-  "scipy",
-  "matplotlib",
 ]
 
 [project.optional-dependencies]
 sweep = [
   "qiskit-aer>=0.17.2",
+  "scipy",
+  "matplotlib",
   "pandas>=2.2",
   "pyarrow",
   "datasets>=3",

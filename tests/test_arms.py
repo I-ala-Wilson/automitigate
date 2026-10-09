@@ -102,9 +102,17 @@ def test_8_score_pull_ideal_is_one():
 
 
 def test_9_seeds():
-    qc = measured(ghz4())
-    assert ideal_counts(qc, seed=4) == ideal_counts(qc, seed=4)
-    assert ideal_counts(qc, seed=4) != ideal_counts(qc, seed=5)
+    aer = pytest.importorskip("qiskit_aer")
+    from automitigate.noise_model import ionq_static, run, seed_for
+    qc_t = ghz4_t()
+    circs, _ = apply_arm(qc_t, ARMS[7], twin_rng_seed=3)
+    nm = ionq_static(0.001, 0.01, 0.01)
+    a = run(circs, nm, 50, seed_for("2026-03-01", 0))
+    b = run(circs, nm, 50, seed_for("2026-03-01", 0))
+    c = run(circs, nm, 50, seed_for("2026-03-01", 1))
+    assert a == b and a != c
+    again, _ = apply_arm(qc_t, ARMS[7], twin_rng_seed=3)
+    assert all(x == y for x, y in zip(circs, again))
 
 
 def test_10_randomised_mirror_statevector():

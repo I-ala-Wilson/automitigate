@@ -19,20 +19,22 @@ def polarisation(p: float, n: int) -> float:
     return float((p - base) / (1 - base))
 
 
-def _zne(scores_by_scale: dict, method: str, base: float) -> tuple[float, bool]:
+def _zne(scores_by_scale: dict, method: str, base: float) -> tuple[float, bool, str]:
+    """(value, clipped, method_used). exp falls back to linear when a score sits at
+    or below the uniform baseline, and says so in method_used."""
     s = np.array(sorted(int(k) for k in scores_by_scale), dtype=float)
     y = np.array([scores_by_scale[k] for k in sorted(scores_by_scale, key=int)], dtype=float)
-    value = None
+    value, used = None, "linear"
     if method == "exp":
         d = y - base
         if np.all(d > 0):
             b, a = np.polyfit(s, np.log(d), 1)
-            value = base + float(np.exp(a))
-    if value is None:  # linear, the primary; also the fallback for exp
+            value, used = base + float(np.exp(a)), "exp"
+    if value is None:
         slope, intercept = np.polyfit(s, y, 1)
         value = float(intercept)
-    clipped = value < 0.0 or value > 1.0
-    return float(min(1.0, max(0.0, value))), clipped
+    clipped = value < -1e-9 or value > 1.0 + 1e-9
+    return float(min(1.0, max(0.0, value))), clipped, used
 
 
 def zne_extrapolate(scores_by_scale: dict, method: str = "linear", n_qubits: int = 0) -> float:
@@ -49,6 +51,9 @@ def score_pull(list_of_counts: list[dict], arm: dict, target: str, n_qubits: int
     copies = TWIRL_COPIES if arm["twirl"] else 1
     if len(list_of_counts) != len(scales) * copies:
         raise ValueError(f"expected {len(scales) * copies} counts, got {len(list_of_counts)}")
+    if len(target) != n_qubits:
+        raise ValueError(f"target {target!r} is not {n_qubits} bits")
+    raw = float(np.mean([frac_target(c, target) for c in list_of_counts[:copies]]))  # scale 1, before REM
     if arm["rem"]:
         if cal_counts is None:
             raise ValueError("REM arm needs cal_counts")
@@ -57,16 +62,16 @@ def score_pull(list_of_counts: list[dict], arm: dict, target: str, n_qubits: int
     for i, s in enumerate(scales):
         block = list_of_counts[i * copies:(i + 1) * copies]
         by_scale[s] = float(np.mean([frac_target(c, target) for c in block]))
-    raw = by_scale[1]
-    clipped = False
+    clipped, used = False, None
     if arm["zne"]:
-        score, clipped = _zne(by_scale, zne_method, 2.0 ** (-n_qubits))
+        score, clipped, used = _zne(by_scale, zne_method, 2.0 ** (-n_qubits))
     else:
-        score = raw
+        score = by_scale[1]
     aux = {
         "raw": raw,
         "by_scale": {str(k): v for k, v in by_scale.items()} if arm["zne"] else None,
-        "rem": raw if arm["rem"] else None,
+        "rem": by_scale[1] if arm["rem"] else None,
+        "zne_method": used,
         "clipped": clipped,
         "polarisation": polarisation(score, n_qubits),
     }

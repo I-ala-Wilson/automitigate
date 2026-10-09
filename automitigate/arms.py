@@ -68,14 +68,14 @@ def transpile_once(qc: QuantumCircuit, chain: list[int], seed: int) -> QuantumCi
 
 def _conjugated_inverse(op, pauli: str):
     """Pauli * G^-1 * Pauli as one gate, for G in {sx, x, rz}."""
+    if op.name not in ("sx", "x", "rz"):
+        raise ValueError(f"unexpected 1q gate {op.name} in a transpiled circuit")
     inv = op.inverse()
     if pauli == "I" or op.name == "x":
         return inv
     if op.name == "sx":  # inv = sxdg; conjugating by Y or Z gives sx, by X gives sxdg
         return op if pauli in ("Y", "Z") else inv
-    if op.name == "rz":  # inv = rz(-theta); X or Y flips the sign back
-        return op if pauli in ("X", "Y") else inv
-    raise ValueError(f"unexpected 1q gate {op.name} in a transpiled circuit")
+    return op if pauli in ("X", "Y") else inv  # rz: inv = rz(-theta); X or Y flips the sign back
 
 
 def build_twin(qc_t: QuantumCircuit, rng: np.random.Generator) -> tuple[QuantumCircuit, str]:
@@ -199,7 +199,12 @@ def _prob_tensor(counts: dict, n: int) -> np.ndarray:
 def apply_rem(counts: dict, cal_counts: list[dict]) -> dict:
     """Tensored assignment-matrix inversion from the |0..0> and |1..1> calibrations.
     Negative quasi-probabilities are clipped and the result renormalised."""
-    n = len(next(iter(counts)).replace(" ", ""))
+    if not counts or len(cal_counts) != 2 or not all(cal_counts):
+        raise ValueError("apply_rem needs non-empty counts and two calibration count dicts")
+    n = len(next(iter(cal_counts[0])).replace(" ", ""))
+    widths = {len(k.replace(" ", "")) for c in (counts, *cal_counts) for k in c}
+    if widths != {n}:
+        raise ValueError(f"bitstring widths differ: {sorted(widths)}")
     cal0, cal1 = (_prob_tensor(c, n) for c in cal_counts)
     t = _prob_tensor(counts, n)
     for q in range(n):
@@ -222,12 +227,13 @@ def apply_rem(counts: dict, cal_counts: list[dict]) -> dict:
 
 
 def apply_arm(qc_t: QuantumCircuit, arm: dict, twin_rng_seed: int,
-              drift: dict | None = None) -> tuple[list[QuantumCircuit], str]:
+              drift: dict | None = None, draw_seed: int | None = None) -> tuple[list[QuantumCircuit], str]:
     """The 1 / 3 / 8 / 24 measured, translated circuits of one pull and the target.
     The twin's Pauli layer depends only on twin_rng_seed, so the eight arms of a
-    cell share it; twirl and drift draws come from a second stream."""
+    cell share it; twirl and drift draws come from a second stream (draw_seed,
+    default derived from twin_rng_seed)."""
     twin, target = build_twin(qc_t, np.random.default_rng(twin_rng_seed))
-    rng = np.random.default_rng([twin_rng_seed, 1])
+    rng = np.random.default_rng([twin_rng_seed if draw_seed is None else draw_seed, 1])
     scales = SCALES if arm["zne"] else [1]
     copies = TWIRL_COPIES if arm["twirl"] else 1
     circs = []
