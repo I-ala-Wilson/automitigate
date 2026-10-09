@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "automitigate"
+version = "0.1.0"
+description = "A bandit that auto-tunes quantum error-mitigation settings per circuit, per machine, per hour, using a mirror-circuit reward that needs no ideal answer."
+readme = "README.md"
+authors = [{ name = "Ian Wilson" }, { name = "Thomas" }]
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+dependencies = [
+  "qiskit>=2.5.2,<3",
+  "numpy",
+  "scipy",
+  "matplotlib",
+]
+
+[project.optional-dependencies]
+sweep = [
+  "qiskit-aer>=0.17.2",
+  "pandas>=2.2",
+  "pyarrow",
+  "datasets>=3",
+  "scikit-learn>=1.5",
+  "huggingface_hub",
+]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["automitigate*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

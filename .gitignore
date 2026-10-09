@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+.env.*
+data/raw/
+*.parquet
+*.arrow
+figures/*.pdf
+.DS_Store
+node_modules/
+logs/
