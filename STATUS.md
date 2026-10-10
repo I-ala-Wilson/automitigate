@@ -46,3 +46,9 @@ done: queue started on ian (darwin, python 3.12.3)
 blocked: none
 next: first runnable stage
 needs-other-side: none
+
+## 2026-10-09 23:10 ET  [ian]
+done: qollab/e0_checks.py rewritten as ONE list job (47 circuits x 1000 shots) with a main() entry point, as Qollab requires; tested against a fake one-job backend (fits recover p1q 0.001 -> 0.001, p2q 0.01 -> 0.009). docs/analysis_plan.md committed before any IBM pass. Mac queue running.
+blocked: none
+next: learners.py, analysis.py, qollab/spot_check_ionq.py (also single-job) Saturday morning.
+needs-other-side: Thomas: re-run E0 with the new qollab/e0_checks.py (git pull, paste, Run, copy the JSON into data/e0.json, commit `[thomas] e0 checks v2`, push). Then start the queue if not yet running: `.\scripts\queue.ps1`.

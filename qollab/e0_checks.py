@@ -1,15 +1,15 @@
-"""E0 checks for the Qollab Code tab.
+"""E0 checks for the Qollab Code tab, as ONE job (Qollab allows a single backend.run per Run).
 
-How to use (Thomas, by hand): in the Qollab project select IonQ Aria-1 as the
-QPU, paste this whole file into the Code tab, press Run, wait for the line
-"COPY EVERYTHING BELOW THIS LINE INTO data/e0.json" and copy the JSON block
-that follows it into data/e0.json in the repo. Nothing here reads or writes
-files or touches the network except through the injected `backend`.
+How to use (Thomas, by hand): in the Qollab project select IonQ Aria-1 as the QPU,
+paste this whole file into the Code tab, press Run, wait for the line
+"COPY EVERYTHING BELOW THIS LINE INTO data/e0.json" and copy the JSON block that
+follows it into data/e0.json in the repo. Qollab calls main() after loading the file.
 
-What it measures: whether list jobs work and their latency, whether a 3x
-folded circuit keeps its two-qubit gates through the compiler, whether repeated
-runs give identical counts, readout flip rates, and a depth sweep that is fitted
-to per-gate depolarising constants (p1q_fit, p2q_fit) for the IonQ-like model.
+Everything is submitted as one list job of ~47 circuits x 1000 shots and read back from
+its position in the list. Measured: list-job latency, mirror twin vs its 3x fold (a fold
+that scores like the unfolded twin was cancelled by the compiler), two identical circuits
+(identical counts = seeded), readout flips, and 1q / 2q depth sweeps fitted to per-gate
+depolarising constants p1q_fit, p2q_fit and readout flips r0_fit, r1_fit.
 """
 import json
 import math
@@ -20,91 +20,9 @@ from qiskit import QuantumCircuit
 
 SHOTS = 1000
 MAX_DEPTH = 20
-TWO_Q_NAMES = {"cz", "cx", "ecr", "ms", "zz", "rzz", "rxx", "ryy", "xx", "yy", "cnot", "swap"}
 RZ_ANGLES = [0.37, 1.21, 2.63, 0.84, 1.97, 3.01, 0.52, 2.28, 1.46, 0.11,
              2.85, 1.73, 0.66, 2.09, 1.32, 0.95, 2.51, 1.08, 0.29, 1.88]
-
-R = {"version": 1, "shots": SHOTS, "errors": {}}
-T0 = time.time()
-
-
-def log(msg):
-    print(f"[e0 {time.time() - T0:6.1f}s] {msg}", flush=True)
-
-
-def probe(name, fn):
-    try:
-        fn()
-    except Exception as exc:  # keep going; the JSON records what failed
-        R["errors"][name] = "".join(traceback.format_exception_only(type(exc), exc)).strip()[-300:]
-        log(f"{name}: FAILED ({R['errors'][name][:120]})")
-
-
-def submit(circs, shots=SHOTS):
-    """Submit one circuit or a list. Returns (list of counts dicts, job)."""
-    job = backend.run(circs, shots=shots)  # noqa: F821 (injected by Qollab)
-    counts = job.result().get_counts()
-    if isinstance(counts, dict):
-        counts = [counts]
-    return [{str(k): int(v) for k, v in c.items()} for c in counts], job
-
-
-def run_many(circs, shots=SHOTS):
-    """List job when the backend accepts one, else one job per circuit."""
-    if R.get("list_jobs_ok"):
-        counts, _ = submit(circs, shots)
-        if len(counts) == len(circs):
-            return counts
-    out = []
-    for c in circs:
-        out.extend(submit(c, shots)[0])
-    return out
-
-
-def frac(counts, target):
-    tot = sum(counts.values()) or 1
-    return counts.get(target, 0) / tot
-
-
-def two_q_count(qc):
-    return sum(n for g, n in qc.count_ops().items() if g in TWO_Q_NAMES)
-
-
-def compiled_two_q(job):
-    """Best effort: number of two-qubit gates in whatever the backend compiled."""
-    for attr in ("compiled_circuit", "compiled_circuits", "compiled"):
-        obj = getattr(job, attr, None)
-        if obj is None:
-            continue
-        try:
-            obj = obj() if callable(obj) else obj
-        except Exception:
-            continue
-        R.setdefault("compiled_type", type(obj).__name__)
-        R.setdefault("compiled_preview", repr(obj)[:400])
-        if isinstance(obj, list) and obj and hasattr(obj[0], "count_ops"):
-            obj = obj[0]
-        if hasattr(obj, "count_ops"):
-            return two_q_count(obj)
-        if isinstance(obj, dict):
-            gates = obj.get("circuit") or obj.get("gates") or obj.get("instructions") or []
-            return sum(1 for g in gates if isinstance(g, dict) and str(g.get("gate", g.get("name", ""))).lower() in TWO_Q_NAMES)
-        if isinstance(obj, str):
-            low = obj.lower()
-            return sum(low.count(f'"{g}"') for g in TWO_Q_NAMES)
-    return None
-
-
-def job_id_of(job):
-    for attr in ("job_id", "id"):
-        v = getattr(job, attr, None)
-        if v is None:
-            continue
-        try:
-            return str(v() if callable(v) else v)
-        except Exception:
-            pass
-    return None
+TWO_Q_NAMES = {"cz", "cx", "ecr", "ms", "zz", "rzz", "rxx", "ryy", "xx", "yy", "cnot", "swap"}
 
 
 def ghz(n):
@@ -138,7 +56,6 @@ def fold3(qc):
 
 
 def chain_2q(depth):
-    """Mirror circuit with `depth` CZ layers each side; ideal outcome 00."""
     fwd = QuantumCircuit(2)
     for i in range(depth):
         fwd.sx(0)
@@ -149,7 +66,6 @@ def chain_2q(depth):
 
 
 def chain_1q(depth):
-    """Mirror circuit with `depth` sx layers each side on one qubit; ideal outcome 0."""
     fwd = QuantumCircuit(1)
     for i in range(depth):
         fwd.sx(0)
@@ -157,13 +73,18 @@ def chain_1q(depth):
     return twin(fwd)
 
 
-def fit_depolarising(points, base, p_other=0.0, gates_other_per_n=0):
-    """points = [(n_gates, P_target)]; model P = base + (1-base) * S * (1-p)^n.
+def two_q_count(qc):
+    return sum(n for g, n in qc.count_ops().items() if g in TWO_Q_NAMES)
 
-    S (readout survival) is the fitted intercept, so readout error does not bias p.
-    p_other / gates_other_per_n remove the contribution of the other gate type
-    (the 1q dressing inside each 2q layer) when it is already known.
-    """
+
+def frac(counts, target):
+    tot = sum(counts.values()) or 1
+    return counts.get(target, 0) / tot
+
+
+def fit_depolarising(points, base, p_other=0.0, gates_other_per_n=0):
+    """points = [(n_gates, P_target)]; model P = base + (1-base) * S * (1-p)^n, S = readout
+    survival (fitted intercept). p_other removes a known other-gate contribution."""
     xs, ys = [], []
     for n, p in points:
         y = (p - base) / (1 - base)
@@ -180,128 +101,101 @@ def fit_depolarising(points, base, p_other=0.0, gates_other_per_n=0):
     return round(min(1.0, max(0.0, 1.0 - math.exp(slope))), 6)
 
 
-def p_backend():
-    R["backend_class"] = type(backend).__name__  # noqa: F821
-    R["backend_name"] = str(getattr(backend, "name", None))  # noqa: F821
-    R["backend_attrs"] = sorted(a for a in dir(backend) if not a.startswith("_"))[:80]  # noqa: F821
-    try:
-        import qiskit
-        R["qiskit_version"] = qiskit.__version__
-    except Exception:
-        pass
+def job_id_of(job):
+    for attr in ("job_id", "id"):
+        v = getattr(job, attr, None)
+        if v is None:
+            continue
+        try:
+            return str(v() if callable(v) else v)
+        except Exception:
+            pass
+    return None
 
 
-def p_bell():
-    counts, job = submit(measured(ghz(2)))
-    R["bell_counts"] = counts[0]
-    R["bell_p_correct"] = round(frac(counts[0], "00") + frac(counts[0], "11"), 4)
-    R["job_attrs"] = sorted(a for a in dir(job) if not a.startswith("_"))[:60]
-    R["job_id_example"] = job_id_of(job)
-    log(f"bell ok, P(00|11) = {R['bell_p_correct']}")
-
-
-def p_list_job():
-    circs = [measured(ghz(4)) for _ in range(24)]
-    t = time.time()
-    try:
-        counts, job = submit(circs)
-        R["latency_s"] = round(time.time() - t, 2)
-        R["list_jobs_ok"] = len(counts) == 24
-        R["list_job_n_results"] = len(counts)
-    except Exception as exc:
-        R["list_jobs_ok"] = False
-        R["errors"]["list_job"] = str(exc)[:300]
-        t = time.time()
-        submit(circs[0])
-        R["latency_s"] = round(time.time() - t, 2)
-    log(f"list job ok = {R['list_jobs_ok']}, latency {R['latency_s']} s")
-
-
-def p_fold():
-    tw = measured(twin(ghz(4)))
-    fd = measured(fold3(twin(ghz(4))))
-    R["twin_2q_submitted"] = two_q_count(tw)
-    R["fold_2q_submitted"] = two_q_count(fd)
-    c1, j1 = submit(tw)
-    c3, j3 = submit(fd)
-    R["twin_p_target"] = round(frac(c1[0], "0000"), 4)
-    R["fold_p_target"] = round(frac(c3[0], "0000"), 4)
-    R["twin_2q_compiled"] = compiled_two_q(j1)
-    R["fold_2q_compiled"] = compiled_two_q(j3)
-    R["fold_survives_compiler"] = (
-        None if R["fold_2q_compiled"] is None
-        else R["fold_2q_compiled"] >= 0.9 * R["fold_2q_submitted"]
-    )
-    log(f"twin P(0000) = {R['twin_p_target']}, fold3 P(0000) = {R['fold_p_target']}, "
-        f"2q submitted {R['fold_2q_submitted']} compiled {R['fold_2q_compiled']}")
-
-
-def p_repeat():
-    a, _ = submit(measured(ghz(4)))
-    b, _ = submit(measured(ghz(4)))
-    R["repeat_identical"] = a[0] == b[0]
-    log(f"repeat identical = {R['repeat_identical']}")
-
-
-def p_readout():
+def build_batch():
+    """The one list job: (label, circuit) in order."""
+    batch = [("bell", measured(ghz(2))), ("ghz4_a", measured(ghz(4))), ("ghz4_b", measured(ghz(4))),
+             ("twin", measured(twin(ghz(4)))), ("fold3", measured(fold3(twin(ghz(4)))))]
     q0 = measured(QuantumCircuit(2))
     q1 = QuantumCircuit(2)
     q1.x([0, 1])
-    q1 = measured(q1)
-    c0, c1 = run_many([q0, q1])
-    R["readout_p00_prep00"] = round(frac(c0, "00"), 4)
-    R["readout_p11_prep11"] = round(frac(c1, "11"), 4)
+    batch += [("ro00", q0), ("ro11", measured(q1))]
+    batch += [(f"d2q_{d}", measured(chain_2q(d))) for d in range(1, MAX_DEPTH + 1)]
+    batch += [(f"d1q_{d}", measured(chain_1q(d))) for d in range(1, MAX_DEPTH + 1)]
+    return batch
+
+
+def analyse(R, batch, counts):
+    c = dict(zip([lab for lab, _ in batch], counts))
+    circ = dict(batch)
+    R["bell_counts"] = c["bell"]
+    R["bell_p_correct"] = round(frac(c["bell"], "00") + frac(c["bell"], "11"), 4)
+    R["repeat_identical"] = c["ghz4_a"] == c["ghz4_b"]
+    R["twin_2q_submitted"] = two_q_count(circ["twin"])
+    R["fold_2q_submitted"] = two_q_count(circ["fold3"])
+    R["twin_p_target"] = round(frac(c["twin"], "0000"), 4)
+    R["fold_p_target"] = round(frac(c["fold3"], "0000"), 4)
+    se = math.sqrt(max(R["twin_p_target"] * (1 - R["twin_p_target"]), 1e-4) / SHOTS)
+    R["fold_survives_compiler"] = R["fold_p_target"] < R["twin_p_target"] - 3 * se
+    R["readout_p00_prep00"] = round(frac(c["ro00"], "00"), 4)
+    R["readout_p11_prep11"] = round(frac(c["ro11"], "11"), 4)
     R["r0_fit"] = round(1 - math.sqrt(max(R["readout_p00_prep00"], 1e-9)), 5)
     R["r1_fit"] = round(1 - math.sqrt(max(R["readout_p11_prep11"], 1e-9)), 5)
-    log(f"readout: P(00|00) = {R['readout_p00_prep00']}, P(11|11) = {R['readout_p11_prep11']}")
-
-
-def p_depth_2q():
-    depths = list(range(1, MAX_DEPTH + 1))
-    circs = [measured(chain_2q(d)) for d in depths]
-    counts = run_many(circs)
-    curve = []
-    for d, qc, c in zip(depths, circs, counts):
-        curve.append({"depth": d, "n2q_submitted": two_q_count(qc), "p_target": round(frac(c, "00"), 4)})
-    R["depth_curve_2q"] = curve
-    R["depth_curve"] = curve
-    R["p2q_fit"] = fit_depolarising([(pt["n2q_submitted"], pt["p_target"]) for pt in curve], 0.25,
+    c1 = [{"depth": d, "n1q_submitted": sum(n for g, n in circ[f"d1q_{d}"].count_ops().items() if g in ("sx", "sxdg", "x")),
+           "p_target": round(frac(c[f"d1q_{d}"], "0"), 4)} for d in range(1, MAX_DEPTH + 1)]
+    R["depth_curve_1q"] = c1
+    R["p1q_fit"] = fit_depolarising([(pt["n1q_submitted"], pt["p_target"]) for pt in c1], 0.5)
+    c2 = [{"depth": d, "n2q_submitted": two_q_count(circ[f"d2q_{d}"]), "p_target": round(frac(c[f"d2q_{d}"], "00"), 4)}
+          for d in range(1, MAX_DEPTH + 1)]
+    R["depth_curve_2q"] = c2
+    R["depth_curve"] = c2
+    R["p2q_fit"] = fit_depolarising([(pt["n2q_submitted"], pt["p_target"]) for pt in c2], 0.25,
                                     p_other=R.get("p1q_fit") or 0.0, gates_other_per_n=2)
-    _, jmax = submit(circs[-1])
-    R["depth20_2q_compiled"] = compiled_two_q(jmax)
-    if R["depth20_2q_compiled"]:
-        scale = R["depth20_2q_compiled"] / curve[-1]["n2q_submitted"]
-        R["p2q_fit_per_compiled_gate"] = fit_depolarising(
-            [(pt["n2q_submitted"] * scale, pt["p_target"]) for pt in curve], 0.25,
-            p_other=R.get("p1q_fit") or 0.0, gates_other_per_n=2 / scale)
-    log(f"2q depth sweep done, p2q_fit = {R['p2q_fit']}")
 
 
-def p_depth_1q():
-    depths = list(range(1, MAX_DEPTH + 1))
-    circs = [measured(chain_1q(d)) for d in depths]
-    counts = run_many(circs)
-    curve = []
-    for d, qc, c in zip(depths, circs, counts):
-        n1 = sum(n for g, n in qc.count_ops().items() if g in ("sx", "sxdg", "x"))
-        curve.append({"depth": d, "n1q_submitted": n1, "p_target": round(frac(c, "0"), 4)})
-    R["depth_curve_1q"] = curve
-    R["p1q_fit"] = fit_depolarising([(pt["n1q_submitted"], pt["p_target"]) for pt in curve], 0.5)
-    log(f"1q depth sweep done, p1q_fit = {R['p1q_fit']}")
+def main():
+    R = {"version": 2, "shots": SHOTS, "errors": {}}
+    t0 = time.time()
 
+    def log(msg):
+        print(f"[e0 {time.time() - t0:6.1f}s] {msg}", flush=True)
 
-log("start")
-probe("backend", p_backend)
-probe("bell", p_bell)
-probe("list_job", p_list_job)
-probe("fold", p_fold)
-probe("repeat", p_repeat)
-probe("readout", p_readout)
-probe("depth_1q", p_depth_1q)
-probe("depth_2q", p_depth_2q)
-R["elapsed_s"] = round(time.time() - T0, 1)
-R["ok"] = not R["errors"]
-log(f"done in {R['elapsed_s']} s, errors: {list(R['errors']) or 'none'}")
-print("=" * 64)
-print("COPY EVERYTHING BELOW THIS LINE INTO data/e0.json")
-print(json.dumps(R, indent=1, default=str))
+    try:
+        R["backend_class"] = type(backend).__name__  # noqa: F821 (injected by Qollab)
+        R["backend_name"] = str(getattr(backend, "name", None))  # noqa: F821
+        R["max_circuits"] = getattr(backend, "max_circuits", None)  # noqa: F821
+        try:
+            import qiskit
+            R["qiskit_version"] = qiskit.__version__
+        except Exception:
+            pass
+        batch = build_batch()
+        R["n_circuits_submitted"] = len(batch)
+        log(f"submitting one job of {len(batch)} circuits x {SHOTS} shots")
+        t = time.time()
+        job = backend.run([qc for _, qc in batch], shots=SHOTS)  # noqa: F821
+        R["job_id"] = job_id_of(job)
+        result = job.result()
+        R["latency_s"] = round(time.time() - t, 2)
+        counts = result.get_counts()
+        if isinstance(counts, dict):
+            counts = [counts]
+        counts = [{str(k).replace(" ", ""): int(v) for k, v in cc.items()} for cc in counts]
+        R["n_results"] = len(counts)
+        R["list_jobs_ok"] = len(counts) == len(batch)
+        log(f"got {len(counts)} results in {R['latency_s']} s")
+        if R["list_jobs_ok"]:
+            analyse(R, batch, counts)
+            log(f"p1q_fit={R['p1q_fit']} p2q_fit={R['p2q_fit']} r0={R['r0_fit']} r1={R['r1_fit']} "
+                f"fold_survives={R['fold_survives_compiler']} repeat_identical={R['repeat_identical']}")
+        else:
+            R["errors"]["list_job"] = f"expected {len(batch)} results, got {len(counts)}"
+    except Exception as exc:
+        R["errors"]["run"] = "".join(traceback.format_exception_only(type(exc), exc)).strip()[-400:]
+        log(f"FAILED: {R['errors']['run'][:160]}")
+    R["elapsed_s"] = round(time.time() - t0, 1)
+    R["ok"] = not R["errors"]
+    print("=" * 64)
+    print("COPY EVERYTHING BELOW THIS LINE INTO data/e0.json")
+    print(json.dumps(R, indent=1, default=str))
