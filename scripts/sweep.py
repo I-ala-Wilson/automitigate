@@ -91,8 +91,10 @@ class Sweep:
         self.n_cells = 0
         self.const = nm.ionq_constants()
         self.skipped = {}
-        if args.forward and not (ROOT / "automitigate" / "forward.py").exists():
-            sys.exit("--forward needs automitigate/forward.py (forward observables land Saturday)")
+        self.fwd = {}
+        if args.forward:
+            from automitigate import forward as fwdmod
+            self.fwdmod = fwdmod
 
     # ---- circuits
     def transpiled(self, circuit):
@@ -126,6 +128,20 @@ class Sweep:
             self.sets[key] = (sets, target)
         return self.sets[key]
 
+    def forward_sets(self, circuit, seed, draw_seed):
+        key = (circuit, seed, draw_seed)
+        if key not in self.fwd:
+            sp = self.fwdmod.spec(circuit)
+            chain = self.chain_for(sp["n"])
+            qc_t = transpile_once(sp["circuit"], chain, seed=nm.seed_for("transpile", circuit, "fwd"))
+            perm = self.fwdmod.layout_perm(qc_t)
+            sets = {(z, t): self.fwdmod.forward_circuits(qc_t, {"zne": z, "twirl": t, "rem": 0}, draw_seed)
+                    for z, t in SHAPES}
+            if len(self.fwd) > 16:
+                self.fwd.clear()
+            self.fwd[key] = (sets, sp, perm)
+        return self.fwd[key]
+
     # ---- one cell = 8 rows
     def run_cell(self, meta, circuit, seed, model, drift, draw_seed, shots):
         t_cell = time.time()
@@ -138,12 +154,22 @@ class Sweep:
             arm = {"zne": shape[0], "twirl": shape[1], "rem": 0}
             counts[shape] = nm.run(circs, model, shots_per_circuit(arm, shots), nm.seed_for(*base, shape))
         cal = nm.run(rem_calibration_circuits(n), model, shots, nm.seed_for(*base, "cal"))
+        fwd_fid = {}
+        if self.a.forward:
+            fsets, sp, perm = self.forward_sets(circuit, seed, draw_seed)
+            fcounts = {}
+            for shape, circs in fsets.items():
+                arm = {"zne": shape[0], "twirl": shape[1], "rem": 0}
+                fcounts[shape] = nm.run(circs, model, shots_per_circuit(arm, shots), nm.seed_for(*base, shape, "fwd"))
+            for arm_id, arm in enumerate(ARMS):
+                shape = (arm["zne"], arm["twirl"])
+                fwd_fid[arm_id] = self.fwdmod.forward_fidelity(fcounts[shape], arm, sp, perm, cal if arm["rem"] else None)[0]
         rows = []
         for arm_id, arm in enumerate(ARMS):
             shape = (arm["zne"], arm["twirl"])
             score, aux = score_pull(counts[shape], arm, target, n, cal if arm["rem"] else None)
             rows.append({**meta, "circuit": circuit, "chain": self.chain_for(n), "arm": arm_id, "seed": seed,
-                         "target": target, "score": score, "aux": aux, "fidelity_fwd": None,
+                         "target": target, "score": score, "aux": aux, "fidelity_fwd": fwd_fid.get(arm_id),
                          "n_circuits": len(sets[shape]) + (2 if arm["rem"] else 0), "shots": shots,
                          "job_id": None, "laptop": self.a.laptop, "drift": dict(drift),
                          "model": dict(self.const), "t_cell_s": round(time.time() - t_cell, 3)})
