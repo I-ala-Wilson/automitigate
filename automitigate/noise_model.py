@@ -274,7 +274,10 @@ def static(p1q: float, p2q: float, readout: float = 0.0):
 
 def run(circs, nm, shots: int, seed: int) -> list[dict]:
     from qiskit_aer import AerSimulator
-    sim = AerSimulator(noise_model=nm, seed_simulator=seed) if nm is not None else AerSimulator(seed_simulator=seed)
+    # density_matrix is exact and fast for <= 8 qubits; the statevector method (which
+    # "automatic" picks at 8 qubits) wedges on these Kraus noise models in Aer 0.17.
+    sim = (AerSimulator(noise_model=nm, method="density_matrix", seed_simulator=seed) if nm is not None
+           else AerSimulator(seed_simulator=seed))
     res = sim.run(circs, shots=shots).result()
     counts = res.get_counts()
     if isinstance(counts, dict):
