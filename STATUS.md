@@ -111,3 +111,9 @@ done: Q2_seed2 finished in 11 min (ladder: max_seeds=20, rungs=none)
 blocked: none
 next: next runnable stage
 needs-other-side: none
+
+## 2026-10-09 23:50 ET  [ian]
+done: chains record is per laptop since 494cd98 (`data/calib/chains_<laptop>.json`; analysis merges them), so the chains.json conflict cannot recur. Pushed since the last block: forward.py + `sweep --forward` (Q2b now runnable after the Yoga's pass 5), spot check as 8 single-circuit Qollab runs (`qollab/spot_check_single.py` + `scripts/spot_compare.py`), replay tables (`data/replay/`), the Qollab demo `main.py` (Run-settings form; replay needs no backend), `scripts/build_qollab_project.py` (-> qollab_project.zip for Sunday's upload), `docs/project_card.md` draft, `docs/video_script.md`. Both queues healthy: Mac on Q1b (ETA ~02:30) then seeds 1-19; Yoga 3 passes done at 11-12 min each.
+blocked: none
+next: wait for passes; Sat: README numbers from docs/results.md, related-work re-check, final figures.
+needs-other-side: Thomas, Sat ~11:00: the 7 E0 runs (qollab/e0_single.py) and 8 spot-check runs (qollab/spot_check_single.py), then `commit the Qollab runs`. Nothing before then.
