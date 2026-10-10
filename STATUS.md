@@ -440,3 +440,8 @@ done: spot check on Qollab IonQ Aria 1 simulator, qollab/spot_check_single.py RU
 blocked: E0 runs (qollab/e0_single.py) RUN = 1 failed twice: IonQJobFailureError "TooManyShots" (jobs 01a12646-4fae-7528-b653-70b207854647, 01a12647-6e2d-7576-a462-861bd0e6d0a5). SHOTS = 5000 is above the simulator's limit; the spot check at 1200 shots works. RUN = 2..7 not attempted since every run uses the same SHOTS; data/e0_runs.jsonl not created.
 note: qft3 spot scores are low on 3 of 4 runs (0.024, 0.46, 0.0125; 0.926 on run 8) with counts piled on non-target bitstrings (e.g. run 5: 100 and 111 vs target 000). ghz4 runs score 0.92-1.0. Looks like the qft3 twin's target or bit order on IonQ, not noise.
 needs-other-side: Ian: lower SHOTS in e0_single.py (1200 works) and check qft3 targets; then E0 can be re-run.
+## 2026-10-10 11:05 ET  [ian]
+done: spot check compared (scripts/spot_compare.py -> data/ionq/spot_check.json): on the 8 identical circuits the local IonQ-like model matches Qollab's Aria-1 simulator to mean |dP| = 0.027 (max 0.088); the line is in docs/results.md. The low qft3 scores (0.02, 0.46, 0.01) are the designed drift: setting A injects a random Pauli after each cz with probability 0.03, and on those two twin seeds a Pauli fired, flipping the outcome; the local simulation of the same circuit gives the same 0.02, so target and bit order are right. E0: qollab/e0_single.py now uses 1200 shots (IonQ rejects 5000).
+blocked: none
+next: fit the IonQ constants once the 7 E0 lines land (scripts/fit_e0.py), then decide whether to rerun the IonQ-like table with them.
+needs-other-side: Thomas: `git pull`, then qollab/e0_single.py RUN = 1..7 as before, lines into data/e0_runs.jsonl, commit `[thomas] e0 runs`, push.

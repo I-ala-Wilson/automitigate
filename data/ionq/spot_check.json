@@ -1,0 +1,116 @@
+{
+ "constants": {
+  "p1": 0.0005,
+  "p2": 0.006,
+  "r": 0.004
+ },
+ "n": 8,
+ "mean_abs_diff": 0.026775,
+ "max_abs_diff": 0.088,
+ "rows": [
+  {
+   "run": 1,
+   "circuit": "ghz4",
+   "setting": "A",
+   "seed": 0,
+   "arm": 0,
+   "target": "0011",
+   "score": 0.9375,
+   "job_id": "01a12648-5b64-78d8-b82b-30475d8daea3",
+   "n2q": 6,
+   "local_score": 0.9441,
+   "abs_diff": 0.0066
+  },
+  {
+   "run": 2,
+   "circuit": "ghz4",
+   "setting": "A",
+   "seed": 1,
+   "arm": 0,
+   "target": "0101",
+   "score": 0.9992,
+   "job_id": "01a12649-1e7f-77a8-9248-1671f378fc02",
+   "n2q": 6,
+   "local_score": 0.9504,
+   "abs_diff": 0.0488
+  },
+  {
+   "run": 3,
+   "circuit": "ghz4",
+   "setting": "B",
+   "seed": 0,
+   "arm": 0,
+   "target": "0011",
+   "score": 0.9175,
+   "job_id": "01a12649-b73c-7cc0-8ccc-1e49f5d47018",
+   "n2q": 6,
+   "local_score": 0.9093,
+   "abs_diff": 0.0082
+  },
+  {
+   "run": 4,
+   "circuit": "ghz4",
+   "setting": "B",
+   "seed": 1,
+   "arm": 0,
+   "target": "0101",
+   "score": 1.0,
+   "job_id": "01a1264a-3dce-7bb8-9c8b-d595845e4d4b",
+   "n2q": 6,
+   "local_score": 0.9521,
+   "abs_diff": 0.0479
+  },
+  {
+   "run": 5,
+   "circuit": "qft3",
+   "setting": "A",
+   "seed": 0,
+   "arm": 0,
+   "target": "000",
+   "score": 0.0242,
+   "job_id": "01a1264b-185b-70f1-8bf3-a3f0962ae188",
+   "n2q": 24,
+   "local_score": 0.0219,
+   "abs_diff": 0.0023
+  },
+  {
+   "run": 6,
+   "circuit": "qft3",
+   "setting": "A",
+   "seed": 1,
+   "arm": 0,
+   "target": "010",
+   "score": 0.46,
+   "job_id": "01a1264b-d15d-728b-a125-72bbd870d221",
+   "n2q": 24,
+   "local_score": 0.4521,
+   "abs_diff": 0.0079
+  },
+  {
+   "run": 7,
+   "circuit": "qft3",
+   "setting": "B",
+   "seed": 0,
+   "arm": 0,
+   "target": "000",
+   "score": 0.0125,
+   "job_id": "01a1264c-8080-7f2e-bcfe-643078637bba",
+   "n2q": 24,
+   "local_score": 0.017,
+   "abs_diff": 0.0045
+  },
+  {
+   "run": 8,
+   "circuit": "qft3",
+   "setting": "B",
+   "seed": 1,
+   "arm": 0,
+   "target": "010",
+   "score": 0.9258,
+   "job_id": "01a1264d-310d-712a-980f-a78e48acab14",
+   "n2q": 24,
+   "local_score": 0.8377,
+   "abs_diff": 0.088
+  }
+ ]
+}

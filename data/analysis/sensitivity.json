@@ -59,5 +59,15 @@
    "n_significant": 9,
    "static_arm": 5
   }
+ },
+ "spot_check": {
+  "n": 8,
+  "mean_abs_diff": 0.026775,
+  "max_abs_diff": 0.088,
+  "constants": {
+   "p1": 0.0005,
+   "p2": 0.006,
+   "r": 0.004
+  }
  }
 }

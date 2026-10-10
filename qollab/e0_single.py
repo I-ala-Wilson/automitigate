@@ -14,7 +14,7 @@ import time
 from qiskit import QuantumCircuit
 
 RUN = 1  # <-- change to 1, 2, 3, 4, 5, 6, 7 and press Run each time
-SHOTS = 5000
+SHOTS = 1200  # IonQ simulator rejects 5000 ("TooManyShots"); 1200 works
 RZ_ANGLES = [0.37, 1.21, 2.63, 0.84, 1.97, 3.01, 0.52, 2.28, 1.46, 0.11,
              2.85, 1.73, 0.66, 2.09, 1.32, 0.95, 2.51, 1.08, 0.29, 1.88]
 
