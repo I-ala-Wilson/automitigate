@@ -26,3 +26,10 @@ note: order inside apply_arm is twin -> fold -> twirl -> drift so every folded c
 blocked: none
 next: scripts/run_queue.py + queue.ps1/queue.sh, then `run_queue ready` here; scripts/sweep.py; noise_model.py; docs/analysis_plan.md before Q2 pass 0.
 needs-other-side: Thomas: E0 (paste qollab/e0_checks.py into the Code tab on Aria-1, copy the JSON into data/e0.json, push).
+
+## 2026-10-09 21:40 ET  [thomas]
+done: E0 run on Qollab, IonQ Aria-1 simulator (25q); JSON in data/e0.json.
+blocked: Qollab allows ONE circuit-execution job per code run. Bell probe ran (P(00|11) = 0.992); list_job, fold, repeat, readout, depth_1q, depth_2q all failed with "The code has already filed one circuit execution job; only one job is allowed per code run". list_jobs_ok = false, ok = false, 12 s total.
+note: after the script ends Qollab raises NameError: name 'main' is not defined, so it seems to expect a main() entry point.
+next: waiting for a fixed e0_checks.py (one job per Run, or split into several scripts) and for `run_queue ready`.
+needs-other-side: Ian: this affects E0, E4 spot check (200 pulls) and live mode.
