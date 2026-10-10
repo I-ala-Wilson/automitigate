@@ -69,3 +69,9 @@ done: Qollab = one circuit per Run, so E0 is now qollab/e0_single.py: 7 Runs by 
 blocked: none
 next: learners.py, analysis.py, forward.py, spot check, web (Saturday).
 needs-other-side: Thomas, Sat ~11:00 (not tonight): the 7 E0 Runs above, then `git add data/e0_runs.jsonl`, commit `[thomas] e0 runs`, push.
+
+## 2026-10-09 23:08 ET  [ian]
+done: Q2_seed0 finished in 14 min (ladder: max_seeds=20, rungs=none)
+blocked: none
+next: next runnable stage
+needs-other-side: none
