@@ -1,34 +1,34 @@
 {
  "exp_zne": {
   "ghz4": {
-   "drift_value_pct": 0.006744255988465227,
-   "n_significant": 5,
+   "drift_value_pct": 0.0031765037919514946,
+   "n_significant": 2,
    "static_arm": 5,
-   "linear_drift_value_pct": 0.0026096554501980054
+   "linear_drift_value_pct": 0.0003739013219631742
   },
   "ghz8": {
    "drift_value_pct": 0.0,
    "n_significant": 0,
    "static_arm": 5,
-   "linear_drift_value_pct": 0.0014797185443685655
+   "linear_drift_value_pct": 0.0012189706694304974
   },
   "grover3": {
-   "drift_value_pct": 0.48353418747818766,
-   "n_significant": 14,
+   "drift_value_pct": 0.45617939761939935,
+   "n_significant": 7,
    "static_arm": 5,
-   "linear_drift_value_pct": 0.008299386791001761
+   "linear_drift_value_pct": 0.009089912057355019
   },
   "qaoa6": {
-   "drift_value_pct": 0.02508594316105346,
-   "n_significant": 6,
+   "drift_value_pct": 0.026870479518893643,
+   "n_significant": 5,
    "static_arm": 5,
    "linear_drift_value_pct": 0.0
   },
   "qft3": {
-   "drift_value_pct": 0.04399847901291242,
-   "n_significant": 5,
+   "drift_value_pct": 0.037490669112512615,
+   "n_significant": 7,
    "static_arm": 5,
-   "linear_drift_value_pct": 0.004834081231623465
+   "linear_drift_value_pct": 0.0025428697697902456
   }
  },
  "f03": {
