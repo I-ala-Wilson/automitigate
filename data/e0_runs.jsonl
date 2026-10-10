@@ -1,0 +1,7 @@
+{"run": 1, "label": "ro00", "target": "00", "n2q": 0, "n1q": 0, "shots": 1200, "p_target": 1.0, "latency_s": 12.45, "counts": {"00": 1200}, "job_id": "01a12655-1229-7d77-af66-16138950b57c"}
+{"run": 2, "label": "ro11", "target": "11", "n2q": 0, "n1q": 2, "shots": 1200, "p_target": 1.0, "latency_s": 12.43, "counts": {"11": 1200}, "job_id": "01a12655-c6cd-7edb-89b0-8364611a0424"}
+{"run": 3, "label": "twin_ghz4", "target": "0000", "n2q": 6, "n1q": 0, "shots": 1200, "p_target": 1.0, "latency_s": 12.37, "counts": {"0000": 1200}, "job_id": "01a12656-75ab-70d0-bd60-c044c87bd400"}
+{"run": 4, "label": "fold3_ghz4", "target": "0000", "n2q": 18, "n1q": 0, "shots": 1200, "p_target": 1.0, "latency_s": 12.42, "counts": {"0000": 1200}, "job_id": "01a12657-2630-7b56-8d63-a135a64e17e9"}
+{"run": 5, "label": "chain2q_d10", "target": "00", "n2q": 20, "n1q": 40, "shots": 1200, "p_target": 1.0, "latency_s": 11.8, "counts": {"00": 1200}, "job_id": "01a12657-db31-76b6-a3c3-bba9220da013"}
+{"run": 6, "label": "chain2q_d20", "target": "00", "n2q": 40, "n1q": 80, "shots": 1200, "p_target": 1.0, "latency_s": 11.98, "counts": {"00": 1200}, "job_id": "01a12658-8d20-72dd-bd46-c1e55b85b8f3"}
+{"run": 7, "label": "chain1q_d20", "target": "0", "n2q": 0, "n1q": 40, "shots": 1200, "p_target": 1.0, "latency_s": 12.14, "counts": {"0": 1200}, "job_id": "01a12659-3d9e-7c95-a63a-1a8fcc307b38"}

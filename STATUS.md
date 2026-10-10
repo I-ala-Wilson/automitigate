@@ -445,3 +445,8 @@ done: spot check compared (scripts/spot_compare.py -> data/ionq/spot_check.json)
 blocked: none
 next: fit the IonQ constants once the 7 E0 lines land (scripts/fit_e0.py), then decide whether to rerun the IonQ-like table with them.
 needs-other-side: Thomas: `git pull`, then qollab/e0_single.py RUN = 1..7 as before, lines into data/e0_runs.jsonl, commit `[thomas] e0 runs`, push.
+
+## 2026-10-10 11:06 ET  [thomas]
+done: E0 on Qollab IonQ Aria 1 simulator, qollab/e0_single.py RUN = 1..7 at 1200 shots, 7/7 succeeded, lines in data/e0_runs.jsonl.
+note: every E0 run has p_target = 1.0 with all 1200 shots on the target, including fold3_ghz4 (18 two-qubit gates) and chain2q_d20 (40 two-qubit gates). Either the noise model is not applied to these circuits or IonQ's compiler cancels the identity chains/folds before simulation, so the depolarising fits will come out ~0. The spot check (drift gates injected) does show noise.
+needs-other-side: Ian: check fit_e0.py output before using p1q/p2q; consider non-identity depth circuits.
