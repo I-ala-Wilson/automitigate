@@ -27,7 +27,7 @@ AutoMitigate treats the choice as a multi-armed bandit, the algorithm behind A/B
 
 Reward = P(target bitstring) of the randomised mirror circuit, averaged over twirl copies, extrapolated 1x/3x/5x to zero noise for ZNE arms, corrected by the assignment matrix for REM arms; every arm spends the same 1,200 shots per pull. Learners: ε-greedy, UCB1, Thompson sampling, and three non-stationary variants (discounted, sliding-window and change-detection Thompson), always plotted against four fixed policies: nothing, everything on, the best fixed arm in hindsight and the per-day oracle.
 
-Two data sources, both simulated locally with Qiskit Aer: (1) a per-day noise model rebuilt from nine months of real ibm_fez calibration data (T1, T2, gate errors, readout, 240 daily snapshots), the headline; (2) an IonQ-like model with constants fitted on Qollab's Aria-1 simulator and a synthetic drift schedule (stable, slow, jump), the demo's first source.
+Two data sources, both simulated locally with Qiskit Aer: (1) a per-day noise model rebuilt from nine months of real ibm_fez calibration data (T1, T2, gate errors, readout, 240 daily snapshots), the headline; (2) an IonQ-like model (depolarising constants near IonQ's published Aria-1 figures, spot-checked against Qollab's Aria-1 simulator) with a synthetic drift schedule (stable, slow, jump), the demo's first source.
 
 ## How to run it
 
