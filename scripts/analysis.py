@@ -392,16 +392,11 @@ def cmd_sensitivity(df):
             h = headline_for(arr, days)
             res["median_chain"][c] = {"drift_value_pct": h["drift_value_pct"], "n_significant": h["n_significant"], "static_arm": h["static_arm"]}
     spot = ROOT / "data" / "ionq" / "spot_check.json"
-    like = df[df.source == "aer_ionq_like"]
-    if spot.exists() and not like.empty:
+    if spot.exists():
         try:
             sp = json.loads(spot.read_text())
-            diffs = []
-            for r in sp.get("rows", []):
-                m = like[(like.circuit == r["circuit"]) & (like.schedule == r.get("schedule")) & (like.step == r.get("step")) & (like.arm == r["arm"])]
-                if not m.empty:
-                    diffs.append(abs(m.score.mean() - r["score"]))
-            res["spot_check"] = {"n": len(diffs), "mean_abs_diff": float(np.mean(diffs)) if diffs else None}
+            res["spot_check"] = {"n": sp.get("n"), "mean_abs_diff": sp.get("mean_abs_diff"), "max_abs_diff": sp.get("max_abs_diff"),
+                                 "constants": sp.get("constants")}
         except Exception as e:
             res["spot_check"] = {"error": str(e)[:200]}
     save("sensitivity", res)
