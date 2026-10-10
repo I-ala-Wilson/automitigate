@@ -1,10 +1,10 @@
 {
  "exp_zne": {
   "ghz4": {
-   "drift_value_pct": 0.00303978850044194,
+   "drift_value_pct": 0.0015399036828972724,
    "n_significant": 1,
    "static_arm": 5,
-   "linear_drift_value_pct": 1.3623472421177774e-05
+   "linear_drift_value_pct": 0.00014069098052441086
   },
   "ghz8": {
    "drift_value_pct": 0.0,
@@ -13,10 +13,10 @@
    "linear_drift_value_pct": 0.0
   },
   "grover3": {
-   "drift_value_pct": 0.28046918939930704,
-   "n_significant": 7,
+   "drift_value_pct": 0.2813865450197073,
+   "n_significant": 4,
    "static_arm": 5,
-   "linear_drift_value_pct": 0.007647608954132231
+   "linear_drift_value_pct": 0.0064149130321897304
   },
   "qaoa6": {
    "drift_value_pct": 0.017566858531482876,
