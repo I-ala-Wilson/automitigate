@@ -300,3 +300,9 @@ done: Q2_seed9 finished in 13 min (ladder: max_seeds=20, rungs=none)
 blocked: none
 next: next runnable stage
 needs-other-side: none
+
+## 2026-10-10 03:55 ET  [ian]
+done: Q3_after9 finished in 1 min (ladder: max_seeds=20, rungs=none)
+blocked: none
+next: next runnable stage
+needs-other-side: none
