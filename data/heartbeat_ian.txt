@@ -1,5 +1,5 @@
-2026-10-10T05:59:19-04:00
-stage: Q2_seed18
-progress: 55.6% · ETA 00:05
+2026-10-10T06:31:09-04:00
+stage: idle
+progress: waiting
 max_seeds: 20
 rungs: []
