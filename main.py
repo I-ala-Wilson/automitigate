@@ -12,7 +12,7 @@ import json
 
 import numpy as np
 
-from automitigate.learners import LEARNERS, DynamicOracle, FixedArm, StaticOracle, run_episode
+from automitigate.learners import LEARNERS, DynamicOracle, FixedArm, StaticOracle, run_episode, smooth_means
 
 # Every data file the demo can read, as literal paths (the runtime loads only named files).
 FILES = {
@@ -82,7 +82,8 @@ def main(circuit: str = "ghz8", source: str = "ibm", schedule: str = "jump", lea
         return
     arr = samples_array(table)
     T, K, S = arr.shape
-    means = np.nanmean(arr, axis=2)
+    smooth = 1 if source == "ibm" else 21  # 5 seeds per step on the IonQ-like tables: oracle from a 21-step moving average
+    means = smooth_means(np.nanmean(arr, axis=2), smooth)
     best = np.nanargmax(means, axis=1)
     static_arm = int(np.argmax(np.nansum(means, axis=0)))
     try:
@@ -114,7 +115,7 @@ def main(circuit: str = "ghz8", source: str = "ibm", schedule: str = "jump", lea
         n = replays if name in LEARNERS else max(3, replays // 5)
         curves, finals, arms_runs = [], [], []
         for i in range(n):
-            out = run_episode(factory(i), arr, np.random.default_rng(100 + i))
+            out = run_episode(factory(i), arr, np.random.default_rng(100 + i), smooth=smooth)
             curves.append(out["pseudo_regret"])
             finals.append(out["pseudo_regret"][-1])
             arms_runs.append(out["arms"])
@@ -129,7 +130,7 @@ def main(circuit: str = "ghz8", source: str = "ibm", schedule: str = "jump", lea
     rec, share = recommendation(arms)
     print()
     print(f"Recommendation after {T} pulls: arm {rec} = {ARM_LABEL[rec]} (chosen in {100 * share:.0f} % of the last 20 pulls; "
-          f"best arm on the final {unit} by the seed-mean table: arm {int(best[-1])} = {ARM_LABEL[int(best[-1])]}).")
+          f"best arm at the end by the seed-mean table{'' if smooth == 1 else f' ({smooth}-step moving average)'}: arm {int(best[-1])} = {ARM_LABEL[int(best[-1])]}).")
     print("Qiskit snippet for that setting:")
     print(snippet_for(rec))
     switches = [t for t in range(1, T) if best[t] != best[t - 1]]
@@ -146,7 +147,8 @@ def main(circuit: str = "ghz8", source: str = "ibm", schedule: str = "jump", lea
     ax.set_title(f"{circuit} on {'real ibm_fez drift' if source == 'ibm' else 'IonQ-like drift, ' + schedule}: {learner} vs fixed policies")
     ax.legend(fontsize=8, frameon=False)
     ax = axes[1]
-    ax.step(range(T), best, where="mid", color="black", linewidth=1, label="best arm (seed mean)")
+    ax.step(range(T), best, where="mid", color="black", linewidth=1,
+            label="best arm (seed mean)" if smooth == 1 else f"best arm (seed mean, {smooth}-step moving average)")
     ax.scatter(range(T), arms, s=6, color="tab:blue", label=f"{learner} choice")
     ax.set_yticks(range(K))
     ax.set_yticklabels(ARM_LABEL, fontsize=7)

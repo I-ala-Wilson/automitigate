@@ -189,19 +189,32 @@ LEARNERS = {
 }
 
 
+def smooth_means(means: np.ndarray, window: int) -> np.ndarray:
+    """Centred moving average along the snapshot axis (edge-padded); window <= 1 is a no-op."""
+    if window <= 1:
+        return means
+    k = np.ones(window) / window
+    pad = window // 2
+    return np.vstack([np.convolve(np.pad(means[:, a], (pad, pad), mode="edge"), k, mode="valid")[:len(means)]
+                      for a in range(means.shape[1])]).T
+
+
 def run_episode(learner: Learner, samples: np.ndarray, rng: np.random.Generator,
                 horizon: int | None = None, pulls_per_snapshot: int = 1,
-                switches: list[int] | None = None, seed_cols: list[int] | None = None) -> dict:
+                switches: list[int] | None = None, seed_cols: list[int] | None = None,
+                smooth: int = 0) -> dict:
     """Replay one episode on stored rewards.
 
     samples: array [T, K, S] of stored rewards (NaN where missing); the learner observes one
     stored sample per pull drawn at random from the chosen snapshot's seeds (seed_cols
     restricts which). Pseudo-regret is cumulative versus the seed-mean best arm per snapshot.
     switch_lag: for each snapshot index in `switches`, pulls until the learner's choice equals
-    the new best arm for 10 consecutive pulls (None if never)."""
+    the new best arm for 10 consecutive pulls (None if never). smooth > 1 replaces the per-snapshot
+    seed means by a centred moving average of that many snapshots before taking the oracle (used
+    for the IonQ-like tables, which have 5 seeds per step)."""
     T, K, S = samples.shape
     cols = list(range(S)) if seed_cols is None else list(seed_cols)
-    means = np.nanmean(samples[:, :, cols], axis=2)
+    means = smooth_means(np.nanmean(samples[:, :, cols], axis=2), smooth)
     best = np.nanargmax(means, axis=1)
     horizon = T if horizon is None else min(horizon, T)
     learner.reset()
