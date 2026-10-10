@@ -16,6 +16,44 @@ RUNS = ROOT / "data" / "e0_runs.jsonl"
 OUT = ROOT / "data" / "e0.json"
 
 
+def fit_ladder(rows, e0, p1_default=0.0005):
+    """E0 v3 (qollab/e0_ladder.py): readout from the 0000 / 1111 runs, p2 from the decay between the
+    12-CX and 36-CX ladders (X gates charged at p1_default). Readout survival of a target string
+    is the product of the per-bit survivals, so it cancels in the slope between the two ladders
+    only approximately; it is corrected per target explicitly."""
+    import math
+    r0 = 1 - rows["ro0000"]["p_target"] ** 0.25
+    r1 = 1 - rows["ro1111"]["p_target"] ** 0.25
+    base = 1 / 16
+
+    def survival(target):
+        return math.prod((1 - r1) if b == "1" else (1 - r0) for b in target)
+
+    def decay(row):
+        y = (row["p_target"] - base) / (1 - base) / survival(row["target"])
+        return math.log(max(y, 1e-6))
+
+    a, b = rows["ladder_d12"], rows["ladder_d36"]
+    if a["p_target"] >= 0.999 and b["p_target"] >= 0.999:
+        print("both ladders returned 1.0: still cancelled or an ideal backend; e0.json unchanged")
+        return 2
+    slope = (decay(b) - decay(a)) / (b["n2q"] - a["n2q"])
+    slope -= (b["n1q"] - a["n1q"]) / (b["n2q"] - a["n2q"]) * math.log(1 - p1_default)
+    p2 = 1 - math.exp(slope)
+    e0.update({"version": 4, "method": "ladder", "r0_fit": round(max(r0, 0.0), 5), "r1_fit": round(max(r1, 0.0), 5),
+               "p1q_fit": p1_default, "p1q_note": "not fitted (single-qubit chains are merged by the compiler); default",
+               "p2q_fit": round(max(p2, 0.0), 6),
+               "ladder": {k: {"p_target": rows[k]["p_target"], "n2q": rows[k]["n2q"], "n1q": rows[k]["n1q"], "target": rows[k]["target"]}
+                          for k in ("ladder_d12", "ladder_d36")},
+               "backend": rows["ladder_d36"].get("backend"), "noise_model": rows["ladder_d36"].get("noise_model"),
+               "job_ids": {k: r.get("job_id") for k, r in rows.items()}, "ok": True})
+    e0.pop("errors", None)
+    OUT.write_text(json.dumps(e0, indent=1))
+    print(f"ladder fit: p2q_fit={e0['p2q_fit']} r0={e0['r0_fit']} r1={e0['r1_fit']} (p1 default {p1_default}); "
+          f"ladders P = {a['p_target']} @ {a['n2q']} CX, {b['p_target']} @ {b['n2q']} CX")
+    return 0
+
+
 def main():
     rows = {}
     for line in RUNS.read_text().splitlines():
@@ -27,6 +65,8 @@ def main():
     e0 = {k: v for k, v in e0.items() if k not in ("errors", "ok")}
     e0["version"] = 3
     e0["runs"] = sorted(rows)
+    if {"ro0000", "ro1111", "ladder_d12", "ladder_d36"} <= set(rows):
+        return fit_ladder(rows, e0)
     need = {"ro00", "ro11", "chain2q_d10", "chain2q_d20", "chain1q_d20"}
     missing = need - set(rows)
     if missing:
