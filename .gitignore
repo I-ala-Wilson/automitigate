@@ -16,4 +16,3 @@ data/ibm/*_seed*.jsonl
 data/ionq_like/*.jsonl
 data/calib/*.jsonl
 qollab_project/
-qollab_project.zip
