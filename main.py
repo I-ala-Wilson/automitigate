@@ -63,7 +63,7 @@ def snippet_for(arm):
     return "\n".join(lines)
 
 
-def main(circuit: str = "ghz8", source: str = "ibm", schedule: str = "jump", learner: str = "Discounted TS",
+def main(circuit: str = "ghz8", source: str = "ibm", schedule: str = "jump", learner: str = "eps-greedy",
          replays: int = 30, live: bool = False):
     import matplotlib.pyplot as plt
 

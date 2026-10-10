@@ -140,4 +140,9 @@ simulator on the same circuits (mean absolute score difference).
 
 ## Typo log
 
-(none yet)
+- 2026-10-10 18:00 ET, added threat 10 (a finding, not a definition change): **IonQ's compiler cancels mirror and
+  folded structure.** On Qollab's Aria-1 noise-model simulator, identity chains of up to 40 gates and a 3x-folded mirror
+  twin all return P(target) = 1.0, so the E0 depth sweep could not fit constants and the IonQ-like model keeps its
+  defaults; the spot check is informative only on cells where injected errors survive compilation. ZNE by folding is
+  not executable through Qollab's IonQ backends without native-gate control. The IBM study is unaffected (Aer applies
+  no optimisation after basis translation).

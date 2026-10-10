@@ -455,3 +455,9 @@ done: E0 lines received, but all seven score exactly 1.0 (even the 40-gate chain
 blocked: none
 next: video tonight; Sunday 09:00 final regenerate by hand.
 needs-other-side: Thomas (1) optional, 10 min: in Select QPU pick the IonQ **Aria-1** entry with the noise model (same one used for the spot check), `git pull`, delete data/e0_runs.jsonl, rerun qollab/e0_single.py RUN 1-7; run 6 must print P(target) well below 1. (2) needed today, 10 min: `git pull`, download qollab_project.zip from the repo, drag it into the project's file tree on Qollab (choose unpack), no QPU selected, press Run, confirm the chart appears, do not Publish; text Ian "demo renders".
+
+## 2026-10-10 17:55 ET  [ian]
+done: Thomas's reading is right: E0 ran on the Aria-1 noise model and the 1.0s are IonQ's compiler cancelling the identity chains (and the folded twin). Consequences recorded in docs/analysis_plan.md (typo log, threat 10) and docs/project_card.md (Limitations): no fitted IonQ constants (defaults kept), spot check informative only on cells with surviving injected errors, ZNE-by-folding not executable through Qollab's IonQ backends. No further E0 attempts. Demo default learner switched to eps-greedy (the winner on every circuit); qollab_project.zip rebuilt.
+blocked: none
+next: video tonight on a scratch project under Ian's account (so the draft needn't be published); Sunday 09:00 final regenerate + zip; Thomas re-uploads the final zip Sunday 14:30 before Publish.
+needs-other-side: Thomas: README tonight (paste docs/results.md under "The headline result", write the rest), project card from docs/project_card.md.
