@@ -33,3 +33,10 @@ blocked: Qollab allows ONE circuit-execution job per code run. Bell probe ran (P
 note: after the script ends Qollab raises NameError: name 'main' is not defined, so it seems to expect a main() entry point.
 next: waiting for a fixed e0_checks.py (one job per Run, or split into several scripts) and for `run_queue ready`.
 needs-other-side: Ian: this affects E0, E4 spot check (200 pulls) and live mode.
+## 2026-10-09 22:50 ET  [ian]
+done: scripts/sweep.py (static / ionq_like / ibm, resumable, #progress lines), scripts/pick_ab.py, scripts/run_queue.py + scripts/queue.sh + scripts/queue.ps1, data/calibration_daily_fez.parquet (241 days), noise_model.py with tests N1–N6 (22 tests green). Measured on the Mac, seconds per (day, circuit) cell: ghz4 0.3, qft3 0.5, ghz8 1.4, grover3 1.5, qaoa6 3.2. Simulation is density-matrix (the statevector method wedges on these Kraus models at 8 qubits).
+split: Mac runs Q1, Q1b, Q2 passes for ghz4, ghz8, grover3, Q3/Q4/Q5; Yoga runs Q2 passes for qft3, qaoa6, then Q2b and Q6. The queue only runs a stage whose inputs exist, so it can be started now and waits by itself.
+run_queue ready
+blocked: none
+next: docs/analysis_plan.md (the ibm passes wait for it), then a one-job rewrite of qollab/e0_checks.py (Qollab allows one backend.run per Run and calls main()), learners.py + analysis.py Saturday morning.
+needs-other-side: Thomas: `git pull` then `.\scripts\queue.ps1` in the repo PowerShell with the venv active; leave the window open. Re-run E0 when the new e0_checks.py lands (it will say so here).
