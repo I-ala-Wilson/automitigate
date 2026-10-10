@@ -233,6 +233,8 @@ needs-other-side: none
 
 ## 2026-10-10 02:55 ET  [thomas]
 done: Q6b finished in 7 min (ladder: max_seeds=20, rungs=none)
+## 2026-10-10 02:56 ET  [ian]
+done: Q2_seed5 finished in 14 min (ladder: max_seeds=20, rungs=none)
 blocked: none
 next: next runnable stage
 needs-other-side: none
