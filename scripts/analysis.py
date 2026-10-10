@@ -51,6 +51,8 @@ def load_rows(pattern="data/**/*.jsonl*"):
                     r = json.loads(line)
                 except Exception:
                     continue
+                if "source" not in r or "score" not in r or "arm" not in r:
+                    continue  # e0 / spot-check run lines live under data/ too
                 d = r.get("drift") or {}
                 aux = r.get("aux") or {}
                 rows.append({
