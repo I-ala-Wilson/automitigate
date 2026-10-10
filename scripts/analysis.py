@@ -311,7 +311,10 @@ def chain_features(days, chain):
 
 def cmd_drivers(df):
     head = load_json("headline")
-    chains = json.loads((ROOT / "data" / "calib" / "chains.json").read_text()) if (ROOT / "data" / "calib" / "chains.json").exists() else {}
+    chains = {}
+    for cf in sorted((ROOT / "data" / "calib").glob("chains*.json")):
+        for rank, m in json.loads(cf.read_text()).items():
+            chains.setdefault(rank, {}).update(m)
     if not head or not chains:
         print("drivers: needs headline.json and data/calib/chains.json")
         return None

@@ -274,7 +274,7 @@ class Sweep:
             for k, v in self.skipped.items():
                 old[k] = sorted(set(old.get(k, [])) | set(v))
             sk.write_text(json.dumps(old, indent=1))
-            ch = ROOT / "data" / "calib" / "chains.json"
+            ch = ROOT / "data" / "calib" / f"chains_{a.laptop}.json"
             ch.parent.mkdir(parents=True, exist_ok=True)
             oldc = json.loads(ch.read_text()) if ch.exists() else {}
             oldc[str(a.chain_rank)] = {**oldc.get(str(a.chain_rank), {}), **{str(k): v for k, v in self.chains.items()}}
