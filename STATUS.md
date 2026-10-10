@@ -64,3 +64,8 @@ done: E0 v2 run on Qollab, IonQ Aria-1 simulator; JSON in data/e0.json.
 blocked: the single 47-circuit list job is rejected: IonQAPIError 400 "Only job type ionq.circuit.v1 is supported". Combined with v1 ("only one job is allowed per code run"), Qollab's IonQ simulator takes ONE circuit per code run. max_circuits = null, 0.6 s.
 next: Ian's call on E0/E4/live mode given one circuit per run (e.g. a tiny E0 with one circuit, or run probes as separate Runs).
 needs-other-side: Ian.
+## 2026-10-09 23:25 ET  [ian]
+done: Qollab = one circuit per Run, so E0 is now qollab/e0_single.py: 7 Runs by hand (set RUN = 1..7, Run, copy the one JSON line into data/e0_runs.jsonl), then scripts/fit_e0.py fits p1q/p2q/r0/r1 and the fold check into data/e0.json. Tested on a fake backend: recovers the injected constants. The spot check (E4) will be a few single-circuit Runs the same way; live mode is out. Neither queue depends on any of this.
+blocked: none
+next: learners.py, analysis.py, forward.py, spot check, web (Saturday).
+needs-other-side: Thomas, Sat ~11:00 (not tonight): the 7 E0 Runs above, then `git add data/e0_runs.jsonl`, commit `[thomas] e0 runs`, push.
