@@ -1,22 +1,22 @@
 {
  "exp_zne": {
   "ghz4": {
-   "drift_value_pct": 0.07486814655811208,
-   "n_significant": 9,
+   "drift_value_pct": 0.03841927580424372,
+   "n_significant": 11,
    "static_arm": 5,
-   "linear_drift_value_pct": 0.0634531900608056
+   "linear_drift_value_pct": 0.0310684619432444
   },
   "ghz8": {
-   "drift_value_pct": 0.032553702725285134,
+   "drift_value_pct": 0.024601478825323785,
    "n_significant": 7,
    "static_arm": 5,
-   "linear_drift_value_pct": 0.016425469324275847
+   "linear_drift_value_pct": 0.015358404433369116
   },
   "grover3": {
-   "drift_value_pct": 1.317951218983895,
-   "n_significant": 13,
+   "drift_value_pct": 1.080453531443339,
+   "n_significant": 15,
    "static_arm": 5,
-   "linear_drift_value_pct": 0.014019524513011973
+   "linear_drift_value_pct": 0.00800974645613401
   },
   "qaoa6": {
    "drift_value_pct": 0.06452684728065058,
