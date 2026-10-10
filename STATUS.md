@@ -93,3 +93,9 @@ done: queue started on ian (darwin, python 3.12.3)
 blocked: none
 next: first runnable stage
 needs-other-side: none
+
+## 2026-10-10 00:05 ET  [ian]
+done: automitigate/learners.py (6 learners + fixed policies + replay episode, tests incl. 13), scripts/analysis.py (headline, learners, best-arm, proxy, drivers, sensitivity, pareto, figures, results-md, all; 80 s on 5 circuits). First look at seed pass 0 (one seed, so no SE yet): static oracle = arm 5 (ZNE+REM) on every circuit, drift value 0.1–0.7 %, many raw argmax flips (shot noise). Real numbers come with more passes. The Mac queue now runs Q3 after every pass and regenerates docs/results.md and figures/.
+blocked: none
+next: automitigate/forward.py + sweep --forward (Q2b), qollab/spot_check (single-circuit runs), web/.
+needs-other-side: none.
