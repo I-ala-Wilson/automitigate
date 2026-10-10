@@ -78,6 +78,8 @@ needs-other-side: none
 
 ## 2026-10-09 23:15 ET  [ian]
 done: Q1 finished in 7 min (ladder: max_seeds=20, rungs=none)
+## 2026-10-09 23:15 ET  [thomas]
+done: Q2_seed0 finished in 17 min (ladder: max_seeds=20, rungs=none)
 blocked: none
 next: next runnable stage
 needs-other-side: none
