@@ -434,3 +434,9 @@ done: Q3_after19 finished in 1 min (ladder: max_seeds=20, rungs=none)
 blocked: none
 next: next runnable stage
 needs-other-side: none
+
+## 2026-10-10 10:53 ET  [thomas]
+done: spot check on Qollab IonQ Aria 1 simulator, qollab/spot_check_single.py RUN = 1..8, 8/8 succeeded, lines in data/ionq/spot_runs.jsonl (job IDs included).
+blocked: E0 runs (qollab/e0_single.py) RUN = 1 failed twice: IonQJobFailureError "TooManyShots" (jobs 01a12646-4fae-7528-b653-70b207854647, 01a12647-6e2d-7576-a462-861bd0e6d0a5). SHOTS = 5000 is above the simulator's limit; the spot check at 1200 shots works. RUN = 2..7 not attempted since every run uses the same SHOTS; data/e0_runs.jsonl not created.
+note: qft3 spot scores are low on 3 of 4 runs (0.024, 0.46, 0.0125; 0.926 on run 8) with counts piled on non-target bitstrings (e.g. run 5: 100 and 111 vs target 000). ghz4 runs score 0.92-1.0. Looks like the qft3 twin's target or bit order on IonQ, not noise.
+needs-other-side: Ian: lower SHOTS in e0_single.py (1200 works) and check qft3 targets; then E0 can be re-run.
