@@ -52,3 +52,9 @@ done: qollab/e0_checks.py rewritten as ONE list job (47 circuits x 1000 shots) w
 blocked: none
 next: learners.py, analysis.py, qollab/spot_check_ionq.py (also single-job) Saturday morning.
 needs-other-side: Thomas: re-run E0 with the new qollab/e0_checks.py (git pull, paste, Run, copy the JSON into data/e0.json, commit `[thomas] e0 checks v2`, push). Then start the queue if not yet running: `.\scripts\queue.ps1`.
+
+## 2026-10-09 22:58 ET  [thomas]
+done: queue started on thomas (win32, python 3.12.10)
+blocked: none
+next: first runnable stage
+needs-other-side: none
