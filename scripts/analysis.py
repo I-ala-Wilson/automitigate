@@ -516,13 +516,14 @@ def cmd_figures(df, quick=False):
 
 def headline_sentence(c, h, L):
     if h["n_significant"] > 0:
+        times = "once" if h['n_significant'] == 1 else f"{h['n_significant']} times"
         s = (f"Over {h['n_days']} daily snapshots of real ibm_fez calibration data, a perfect tracker would have gained "
-             f"{h['drift_value_pct']:.1f} % over the best fixed setting for {c} (arm {h['static_arm']}, {h['static_label']}); "
-             f"the best setting changed significantly {h['n_significant']} times ({len(h['epochs'])} epochs, median length "
+             f"{h['drift_value_pct']:.2f} % over the best fixed setting for {c} (arm {h['static_arm']}, {h['static_label']}); "
+             f"the best setting changed significantly {times} ({len(h['epochs'])} epochs, median length "
              f"{h['median_epoch_days']:.0f} days; {h['raw_flips']} raw argmax flips, ambiguous-day fraction {h['ambiguous_fraction']:.2f}).")
     else:
         s = (f"Over {h['n_days']} daily snapshots the best mitigation setting for {c} was stationary: the drift value is "
-             f"{h['drift_value_pct']:.1f} % (a fixed setting chosen once is within {h['drift_value_pct']:.1f} % of a perfect tracker), "
+             f"{h['drift_value_pct']:.2f} % (a fixed setting chosen once is within {h['drift_value_pct']:.2f} % of a perfect tracker), "
              f"with {h['raw_flips']} raw argmax flips and an ambiguous-day fraction of {h['ambiguous_fraction']:.2f}.")
     if L:
         best = min((n for n in L["learners"] if n in LEARNERS), key=lambda n: L["learners"][n]["regret_mean"])
@@ -561,13 +562,29 @@ def cmd_results_md(df):
     if drivers:
         lines.append("**Drivers.** " + " ".join(
             (f"{c}: a multinomial logistic fit of the best arm on chain cz error, readout error, T1 and T2 reaches cross-validated accuracy "
-             f"{e['cv_accuracy']:.2f} against a majority rate of {e['majority_rate']:.2f}; " if "cv_accuracy" in e else f"{c}: ")
+             f"{e['cv_accuracy']:.2f} against a majority rate of {e['majority_rate']:.2f}; " if e.get("cv_accuracy") is not None and e["cv_accuracy"] == e["cv_accuracy"] else f"{c} (best arm almost never changes, nothing to fit): ")
             + f"{e['switches_within_1_day_of_recal']} of {e['switches']} significant switches fall within a day of a chip-wide recalibration (base rate {e['base_rate_near_recal']:.2f})."
             for c, e in drivers.items()))
         lines.append("")
     if sens:
-        for k, v in sens.items():
-            lines.append(f"**Sensitivity, {k.replace('_', ' ')}.** `{json.dumps(v, default=float)[:600]}`")
+        parts = []
+        if "exp_zne" in sens:
+            parts.append("exponential instead of linear ZNE: " + "; ".join(
+                f"{c} drift value {v['drift_value_pct']:.2f} % ({v['n_significant']} significant switches) vs "
+                f"{(v.get('linear_drift_value_pct') or 0):.2f} % linear" for c, v in sens["exp_zne"].items()))
+        if "f03" in sens:
+            parts.append("coherent fraction f = 0.3 (seeds 0–9): " + "; ".join(
+                f"{c} drift value {v['drift_value_pct']:.2f} % ({v['n_significant']} switches) vs "
+                f"{v['f0_same_seeds'].get('drift_value_pct', 0):.2f} % ({v['f0_same_seeds'].get('n_significant')}) at f = 0 on the same seeds, static arm {v['static_arm']} in both"
+                for c, v in sens["f03"].items()))
+        if "median_chain" in sens:
+            parts.append("median-ranked chain instead of the best chain: " + "; ".join(
+                f"{c} drift value {v['drift_value_pct']:.2f} % with {v['n_significant']} significant switches (static arm {v['static_arm']})"
+                for c, v in sens["median_chain"].items()))
+        if "spot_check" in sens and sens["spot_check"].get("mean_abs_diff") is not None:
+            sp = sens["spot_check"]
+            parts.append(f"Qollab Aria-1 spot check: mean |P_qollab − P_local| = {sp['mean_abs_diff']:.3f} over {sp['n']} single-circuit runs (max {sp['max_abs_diff']:.3f})")
+        lines.append("**Sensitivity.** " + ". ".join(parts) + ".")
         lines.append("")
     figs = sorted(p.name for p in FIG.glob("*.png")) if FIG.exists() else []
     if figs:
