@@ -5,8 +5,9 @@ Press Run. The form under Run settings picks the circuit, the data source and th
 Replay mode needs no backend: the learner is replayed on reward tables committed in data/replay/,
 recorded on two laptops from (a) a per-day noise model rebuilt from nine months of real
 ibm_fez calibration data and (b) an IonQ-like model with a synthetic drift schedule.
-With live = True the chosen backend runs one real pull of the recommended setting (Qollab
-allows one circuit per run), so you can compare it with the replay.
+After the replay, one real pull of the recommended setting's mirror circuit is executed on
+the selected backend (the free built-in simulator by default; Qollab allows one circuit per run
+on IonQ backends), so a Run always executes a quantum circuit too. live = False skips it.
 """
 import json
 
@@ -64,7 +65,7 @@ def snippet_for(arm):
 
 
 def main(circuit: str = "ghz8", source: str = "ibm", schedule: str = "jump", learner: str = "eps-greedy",
-         replays: int = 30, live: bool = False):
+         replays: int = 30, live: bool = True):
     import matplotlib.pyplot as plt
 
     key = f"ionq:{circuit}:{schedule}" if source.startswith("ionq") else f"ibm:{circuit}"
@@ -158,12 +159,16 @@ def main(circuit: str = "ghz8", source: str = "ibm", schedule: str = "jump", lea
     plt.show()
 
     if live:
-        live_pull(circuit, rec)
+        try:
+            live_pull(circuit, rec)
+        except Exception as exc:
+            print(f"(live pull skipped: {type(exc).__name__}: {str(exc)[:160]})")
 
 
 def live_pull(circuit, arm):
-    """One real pull on the selected backend: the mirror circuit of the recommended setting's
-    cheapest shape (one circuit, because Qollab allows one job per run)."""
+    """One real pull on the selected backend: the randomised mirror circuit of the chosen
+    circuit, one circuit only (Qollab's IonQ backends allow one job per run). On the ideal
+    built-in simulator P(target) is 1; on a noise-model backend it is the arm-0 mirror score."""
     try:
         from automitigate.arms import apply_arm, transpile_once
         from automitigate.circuits import CIRCUITS
@@ -174,8 +179,13 @@ def live_pull(circuit, arm):
     qc = CIRCUITS[circuit]()
     qc_t = transpile_once(qc, list(range(qc.num_qubits)), seed=0)
     circs, target = apply_arm(qc_t, {"zne": 0, "twirl": 0, "rem": 0}, twin_rng_seed=0)
-    print(f"\nLive: running one mirror circuit of {circuit} on {getattr(backend, 'name', 'the selected backend')} ...")  # noqa: F821
-    job = backend.run(circs[0], shots=1200)  # noqa: F821
+    qc = circs[0]
+    n2q = sum(v for g, v in qc.count_ops().items() if g in ("cz", "rzz"))
+    name = getattr(backend, "name", None) or type(backend).__name__  # noqa: F821
+    print(f"\nLive pull on {name}: randomised mirror circuit of {circuit} ({qc.num_qubits} qubits, {n2q} two-qubit gates, "
+          f"target bitstring {target}), 1200 shots ...")
+    job = backend.run(qc, shots=1200)  # noqa: F821
     counts = {str(k).replace(" ", ""): v for k, v in job.result().get_counts().items()}
-    print(f"P(target={target}) = {frac_target(counts, target):.3f} on the backend (arm 0 shape; the recommended arm {arm} "
-          f"adds {ARM_LABEL[arm]} on top, which needs several circuits).")
+    top = sorted(counts.items(), key=lambda kv: -kv[1])[:3]
+    print(f"P(target) = {frac_target(counts, target):.3f}; top outcomes {top}. This is the arm-0 shape; the recommended "
+          f"arm {arm} ({ARM_LABEL[arm]}) adds its extra circuits on top, which the replay tables already contain.")
