@@ -35,6 +35,11 @@ def main():
         e0["ok"] = False
         OUT.write_text(json.dumps(e0, indent=1))
         return 1
+    if all(r["p_target"] >= 0.999 for r in rows.values()):
+        print("every run scored P(target) = 1.0, including the depth-20 chains: these runs came from an ideal "
+              "simulator, not the Aria-1 noise model. Select the IonQ Aria-1 noise-model simulator in Select QPU "
+              "and run again. e0.json left unchanged.")
+        return 2
     p00, p11 = rows["ro00"]["p_target"], rows["ro11"]["p_target"]
     r0 = 1 - math.sqrt(max(p00, 1e-9))
     r1 = 1 - math.sqrt(max(p11, 1e-9))

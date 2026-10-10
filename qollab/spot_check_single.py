@@ -155,7 +155,10 @@ def main():
     job = backend.run(qc, shots=SHOTS)  # noqa: F821 (injected by Qollab)
     counts = {str(k).replace(" ", ""): int(v) for k, v in job.result().get_counts().items()}
     jid = getattr(job, "job_id", None)
+    opts = getattr(backend, "options", None)  # noqa: F821
     row = {"run": RUN, "source": "ionq_aria1", "circuit": circuit, "setting": setting, "drift": drift, "seed": seed,
+           "backend": str(getattr(backend, "name", None)),  # noqa: F821
+           "noise_model": str(getattr(opts, "noise_model", None)) if opts is not None else None,
            "draw_seed": draw_seed, "arm": 0, "target": target, "shots": SHOTS,
            "score": round(counts.get(target, 0) / max(sum(counts.values()), 1), 4),
            "latency_s": round(time.time() - t, 2), "n2q": sum(n for g, n in qc.count_ops().items() if g in ("cz", "rzz")),

@@ -92,7 +92,10 @@ def main():
     job = backend.run(qc, shots=SHOTS)  # noqa: F821 (injected by Qollab)
     counts = job.result().get_counts()
     counts = {str(k).replace(" ", ""): int(v) for k, v in counts.items()}
+    opts = getattr(backend, "options", None)  # noqa: F821
     row = {"run": RUN, "label": label, "target": target, "n2q": n2q, "n1q": n1q, "shots": SHOTS,
+           "backend": str(getattr(backend, "name", None)),  # noqa: F821
+           "noise_model": str(getattr(opts, "noise_model", None)) if opts is not None else None,
            "p_target": round(counts.get(target, 0) / max(sum(counts.values()), 1), 4),
            "latency_s": round(time.time() - t, 2), "counts": counts,
            "job_id": str(getattr(job, "job_id", lambda: None)() if callable(getattr(job, "job_id", None)) else getattr(job, "job_id", None))}
