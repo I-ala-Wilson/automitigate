@@ -1,5 +1,5 @@
-2026-10-10T01:00:48-04:00
-stage: Q2b
-progress: 74.9% · ETA 00:14
+2026-10-10T01:31:48-04:00
+stage: Q2_seed7
+progress: 46.7% · ETA 00:05
 max_seeds: 20
 rungs: []
