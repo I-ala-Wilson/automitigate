@@ -40,3 +40,9 @@ run_queue ready
 blocked: none
 next: docs/analysis_plan.md (the ibm passes wait for it), then a one-job rewrite of qollab/e0_checks.py (Qollab allows one backend.run per Run and calls main()), learners.py + analysis.py Saturday morning.
 needs-other-side: Thomas: `git pull` then `.\scripts\queue.ps1` in the repo PowerShell with the venv active; leave the window open. Re-run E0 when the new e0_checks.py lands (it will say so here).
+
+## 2026-10-09 22:49 ET  [ian]
+done: queue started on ian (darwin, python 3.12.3)
+blocked: none
+next: first runnable stage
+needs-other-side: none
