@@ -446,7 +446,7 @@ def cmd_figures(df, quick=False):
                     color="0.55" if name in styles else None)
         ax.set_xlabel("pull (one per daily snapshot)")
         ax.set_ylabel("cumulative pseudo-regret")
-        ax.set_title(f"{c}: learners vs fixed policies (seeds {e['reported_on'][0]}–{e['reported_on'][-1]})")
+        ax.set_title(f"{c}: learners vs fixed policies (seeds {e['reported_on'][0]}–{e['reported_on'][-1]})", fontsize=9)
         ax.legend(fontsize=7, ncol=2, frameon=False)
         fig.tight_layout()
         p = FIG / f"regret_{c}.png"
@@ -464,18 +464,18 @@ def cmd_figures(df, quick=False):
             ax.set_yticks(range(K))
             ax.set_yticklabels(ARM_LABEL, fontsize=7)
             ax.set_xlabel("daily snapshot")
-            ax.set_title(f"{c}: best arm per day (Z=ZNE, T=twirl, R=readout mitigation); grey = significant switch")
+            ax.set_title(f"{c}: best arm per day (Z = ZNE, T = twirl, R = readout mitigation; grey = significant switch)", fontsize=8)
             fig.tight_layout()
             p = FIG / f"best_arm_{c}.png"
             fig.savefig(p, dpi=150)
             plt.close(fig)
             made.append(p.name)
         if head:
-            fig, ax = plt.subplots(figsize=(4.5, 3))
+            fig, ax = plt.subplots(figsize=(5.5, 3.2))
             cs = list(head)
             ax.bar(cs, [head[c]["drift_value_pct"] for c in cs], color="0.5")
             ax.set_ylabel("drift value (% of static oracle)")
-            ax.set_title("What a perfect tracker gains over the best fixed arm")
+            ax.set_title("Drift value: what a perfect tracker gains\nover the best fixed arm", fontsize=10)
             fig.tight_layout()
             p = FIG / "drift_value.png"
             fig.savefig(p, dpi=150)
