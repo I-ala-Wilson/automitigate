@@ -117,3 +117,8 @@ done: chains record is per laptop since 494cd98 (`data/calib/chains_<laptop>.jso
 blocked: none
 next: wait for passes; Sat: README numbers from docs/results.md, related-work re-check, final figures.
 needs-other-side: Thomas, Sat ~11:00: the 7 E0 runs (qollab/e0_single.py) and 8 spot-check runs (qollab/spot_check_single.py), then `commit the Qollab runs`. Nothing before then.
+## 2026-10-09 23:54 ET  [thomas]
+done: Q2_seed3 finished in 11 min (ladder: max_seeds=20, rungs=none)
+blocked: none
+next: next runnable stage
+needs-other-side: none
