@@ -12,3 +12,4 @@ figures/*.pdf
 .DS_Store
 node_modules/
 logs/
+data/ibm/*_seed*.jsonl
