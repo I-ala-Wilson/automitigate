@@ -2,7 +2,7 @@
 
 *A bandit that auto-tunes quantum error-mitigation settings per circuit, per machine, per hour, using a mirror-circuit reward that needs no ideal answer.*
 
-Built for the Qollab + IonQ Global Quantum Hackathon, Oct 9–11 2026. MIT licensed.
+Built for the Qollab + IonQ Global Quantum Hackathon, Oct 9–11 2026. MIT licensed. This effort is supported by Qollab & IonQ.
 
 > README owner: Thomas. Fill every section below before Sunday 14:00 ET. Judges weight Documentation Quality equally with the code. "The headline result" is pasted from `docs/results.md`, which the sweep pipeline regenerates after every pass.
 
