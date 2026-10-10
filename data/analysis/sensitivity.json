@@ -19,16 +19,16 @@
    "linear_drift_value_pct": 0.15922908120257057
   },
   "qaoa6": {
-   "drift_value_pct": 1.110948140721018,
-   "n_significant": 0,
+   "drift_value_pct": 0.09081182208600631,
+   "n_significant": 6,
    "static_arm": 5,
-   "linear_drift_value_pct": 0.11995609523731462
+   "linear_drift_value_pct": 0.0
   },
   "qft3": {
-   "drift_value_pct": 0.7348602936047997,
-   "n_significant": 0,
+   "drift_value_pct": 0.11302364072773279,
+   "n_significant": 10,
    "static_arm": 5,
-   "linear_drift_value_pct": 0.6623625461398356
+   "linear_drift_value_pct": 0.03690716096594536
   }
  }
 }

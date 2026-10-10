@@ -6,9 +6,9 @@
 
 **grover3.** Over 240 daily snapshots the best mitigation setting for grover3 was stationary: the drift value is 0.2 % (a fixed setting chosen once is within 0.2 % of a perfect tracker), with 42 raw argmax flips and an ambiguous-day fraction of 1.00. eps-greedy had the lowest dynamic pseudo-regret, 3.21 [2.01, 5.44], against 15.57 for the everything-on default and 0.30 for the static oracle (seeds 0–0, tuned on the same seeds).
 
-**qaoa6.** Over 240 daily snapshots the best mitigation setting for qaoa6 was stationary: the drift value is 0.1 % (a fixed setting chosen once is within 0.1 % of a perfect tracker), with 31 raw argmax flips and an ambiguous-day fraction of 1.00. eps-greedy had the lowest dynamic pseudo-regret, 3.07 [2.15, 4.19], against 12.46 for the everything-on default and 0.25 for the static oracle (seeds 0–0, tuned on the same seeds).
+**qaoa6.** Over 240 daily snapshots the best mitigation setting for qaoa6 was stationary: the drift value is 0.0 % (a fixed setting chosen once is within 0.0 % of a perfect tracker), with 0 raw argmax flips and an ambiguous-day fraction of 0.03. eps-greedy had the lowest dynamic pseudo-regret, 3.32 [2.21, 4.75], against 14.30 for the everything-on default and 0.00 for the static oracle (seeds 0–7, tuned on the same seeds).
 
-**qft3.** Over 240 daily snapshots the best mitigation setting for qft3 was stationary: the drift value is 0.7 % (a fixed setting chosen once is within 0.7 % of a perfect tracker), with 106 raw argmax flips and an ambiguous-day fraction of 1.00. eps-greedy had the lowest dynamic pseudo-regret, 3.51 [2.27, 6.04], against 4.49 for the everything-on default and 1.54 for the static oracle (seeds 0–0, tuned on the same seeds).
+**qft3.** Over 240 daily snapshots of real ibm_fez calibration data, a perfect tracker would have gained 0.0 % over the best fixed setting for qft3 (arm 5, Z-R); the best setting changed significantly 3 times (4 epochs, median length 26 days; 36 raw argmax flips, ambiguous-day fraction 0.64). eps-greedy had the lowest dynamic pseudo-regret, 2.17 [1.22, 5.00], against 3.89 for the everything-on default and 0.09 for the static oracle (seeds 0–7, tuned on the same seeds).
 
 | circuit | learner | pseudo-regret (mean) | 95 % CI | vs arm 7 | switch lag (pulls) |
 |---|---|---|---|---|---|
@@ -42,29 +42,31 @@
 | grover3 | arm 7 | 15.57 | [15.57, 15.57] | +0 % | – |
 | grover3 | static oracle | 0.30 | [0.30, 0.30] | +98 % | – |
 | grover3 | dynamic oracle | 0.00 | [0.00, 0.00] | +100 % | – |
-| qaoa6 | eps-greedy | 3.07 | [2.15, 4.19] | +75 % | – |
-| qaoa6 | UCB1 | 19.36 | [19.36, 19.36] | -55 % | – |
-| qaoa6 | Thompson | 14.26 | [7.74, 22.11] | -15 % | – |
-| qaoa6 | Discounted TS | 16.07 | [10.17, 22.51] | -29 % | – |
-| qaoa6 | Sliding-Window TS | 17.31 | [13.31, 21.51] | -39 % | – |
-| qaoa6 | Change-Detection TS | 16.25 | [9.93, 21.48] | -30 % | – |
-| qaoa6 | arm 0 | 31.77 | [31.77, 31.77] | -155 % | – |
-| qaoa6 | arm 7 | 12.46 | [12.46, 12.46] | +0 % | – |
-| qaoa6 | static oracle | 0.25 | [0.25, 0.25] | +98 % | – |
+| qaoa6 | eps-greedy | 3.32 | [2.21, 4.75] | +77 % | – |
+| qaoa6 | UCB1 | 22.08 | [21.61, 22.60] | -54 % | – |
+| qaoa6 | Thompson | 15.67 | [7.82, 24.67] | -10 % | – |
+| qaoa6 | Discounted TS | 17.64 | [11.28, 24.19] | -23 % | – |
+| qaoa6 | Sliding-Window TS | 19.99 | [15.29, 24.68] | -40 % | – |
+| qaoa6 | Change-Detection TS | 18.28 | [10.52, 24.74] | -28 % | – |
+| qaoa6 | arm 0 | 38.34 | [38.34, 38.34] | -168 % | – |
+| qaoa6 | arm 7 | 14.30 | [14.30, 14.30] | +0 % | – |
+| qaoa6 | static oracle | 0.00 | [0.00, 0.00] | +100 % | – |
 | qaoa6 | dynamic oracle | 0.00 | [0.00, 0.00] | +100 % | – |
-| qft3 | eps-greedy | 3.51 | [2.27, 6.04] | +22 % | – |
-| qft3 | UCB1 | 10.27 | [10.27, 10.27] | -129 % | – |
-| qft3 | Thompson | 7.98 | [4.81, 12.56] | -78 % | – |
-| qft3 | Discounted TS | 8.70 | [5.60, 12.14] | -94 % | – |
-| qft3 | Sliding-Window TS | 9.16 | [6.93, 12.15] | -104 % | – |
-| qft3 | Change-Detection TS | 8.51 | [5.03, 12.73] | -89 % | – |
-| qft3 | arm 0 | 18.58 | [18.58, 18.58] | -314 % | – |
-| qft3 | arm 7 | 4.49 | [4.49, 4.49] | +0 % | – |
-| qft3 | static oracle | 1.54 | [1.54, 1.54] | +66 % | – |
-| qft3 | dynamic oracle | 0.00 | [0.00, 0.00] | +100 % | – |
+| qft3 | eps-greedy | 2.17 | [1.22, 5.00] | +44 % | 13, 11, 11 |
+| qft3 | UCB1 | 12.17 | [11.91, 12.45] | -213 % | –, –, – |
+| qft3 | Thompson | 8.95 | [4.28, 14.13] | -130 % | 110, 96, 86 |
+| qft3 | Discounted TS | 9.55 | [5.40, 13.75] | -145 % | 115, 98, 85 |
+| qft3 | Sliding-Window TS | 10.31 | [6.39, 13.72] | -165 % | 90, 85, 81 |
+| qft3 | Change-Detection TS | 9.31 | [4.73, 13.77] | -139 % | 113, 96, 83 |
+| qft3 | arm 0 | 23.07 | [23.07, 23.07] | -492 % | –, –, – |
+| qft3 | arm 7 | 3.89 | [3.89, 3.89] | +0 % | –, –, – |
+| qft3 | static oracle | 0.09 | [0.09, 0.09] | +98 % | 0, 0, 0 |
+| qft3 | dynamic oracle | 0.00 | [0.00, 0.00] | +100 % | 0, 13, 0 |
 
-**Drivers.** ghz4: a multinomial logistic fit of the best arm on chain cz error, readout error, T1 and T2 reaches cross-validated accuracy 0.71 against a majority rate of 0.71; 0 of 0 significant switches fall within a day of a chip-wide recalibration (base rate 0.51). ghz8: a multinomial logistic fit of the best arm on chain cz error, readout error, T1 and T2 reaches cross-validated accuracy 0.81 against a majority rate of 0.82; 0 of 0 significant switches fall within a day of a chip-wide recalibration (base rate 0.51). grover3: a multinomial logistic fit of the best arm on chain cz error, readout error, T1 and T2 reaches cross-validated accuracy 0.90 against a majority rate of 0.90; 0 of 0 significant switches fall within a day of a chip-wide recalibration (base rate 0.51). qaoa6: a multinomial logistic fit of the best arm on chain cz error, readout error, T1 and T2 reaches cross-validated accuracy 0.92 against a majority rate of 0.93; 0 of 0 significant switches fall within a day of a chip-wide recalibration (base rate 0.51). qft3: a multinomial logistic fit of the best arm on chain cz error, readout error, T1 and T2 reaches cross-validated accuracy 0.65 against a majority rate of 0.65; 0 of 0 significant switches fall within a day of a chip-wide recalibration (base rate 0.51).
+**Proxy validation (per day).** ghz4: the mirror score picked the forward-best arm on 46 % of 240 days (median Spearman 0.88, median forward regret of the mirror pick 1 % of the worst arm's). grover3: the mirror score picked the forward-best arm on 94 % of 240 days (median Spearman 0.93, median forward regret of the mirror pick 0 % of the worst arm's). qft3: the mirror score picked the forward-best arm on 29 % of 240 days (median Spearman 0.62, median forward regret of the mirror pick 8 % of the worst arm's).
 
-**Sensitivity, exp zne.** `{"ghz4": {"drift_value_pct": 0.3791739680174971, "n_significant": 0, "static_arm": 5, "linear_drift_value_pct": 0.3490133799330426}, "ghz8": {"drift_value_pct": 0.48490722997509117, "n_significant": 0, "static_arm": 5, "linear_drift_value_pct": 0.37401392229646535}, "grover3": {"drift_value_pct": 4.095579595742442, "n_significant": 0, "static_arm": 5, "linear_drift_value_pct": 0.15922908120257057}, "qaoa6": {"drift_value_pct": 1.110948140721018, "n_significant": 0, "static_arm": 5, "linear_drift_value_pct": 0.11995609523731462}, "qft3": {"drift_value_pct": 0.7348602936047997, "n_significant": `
+**Drivers.** ghz4: a multinomial logistic fit of the best arm on chain cz error, readout error, T1 and T2 reaches cross-validated accuracy 0.71 against a majority rate of 0.71; 0 of 0 significant switches fall within a day of a chip-wide recalibration (base rate 0.51). ghz8: a multinomial logistic fit of the best arm on chain cz error, readout error, T1 and T2 reaches cross-validated accuracy 0.81 against a majority rate of 0.82; 0 of 0 significant switches fall within a day of a chip-wide recalibration (base rate 0.51). grover3: a multinomial logistic fit of the best arm on chain cz error, readout error, T1 and T2 reaches cross-validated accuracy 0.90 against a majority rate of 0.90; 0 of 0 significant switches fall within a day of a chip-wide recalibration (base rate 0.51). qaoa6: 0 of 0 significant switches fall within a day of a chip-wide recalibration (base rate 0.51). qft3: a multinomial logistic fit of the best arm on chain cz error, readout error, T1 and T2 reaches cross-validated accuracy 0.93 against a majority rate of 0.93; 0 of 3 significant switches fall within a day of a chip-wide recalibration (base rate 0.51).
 
-**Figures.** `figures/best_arm_ghz4.png`, `figures/best_arm_ghz8.png`, `figures/best_arm_grover3.png`, `figures/best_arm_qaoa6.png`, `figures/best_arm_qft3.png`, `figures/drift_value.png`, `figures/regret_ghz4.png`, `figures/regret_ghz8.png`, `figures/regret_grover3.png`, `figures/regret_qaoa6.png`, `figures/regret_qft3.png`
+**Sensitivity, exp zne.** `{"ghz4": {"drift_value_pct": 0.3791739680174971, "n_significant": 0, "static_arm": 5, "linear_drift_value_pct": 0.3490133799330426}, "ghz8": {"drift_value_pct": 0.48490722997509117, "n_significant": 0, "static_arm": 5, "linear_drift_value_pct": 0.37401392229646535}, "grover3": {"drift_value_pct": 4.095579595742442, "n_significant": 0, "static_arm": 5, "linear_drift_value_pct": 0.15922908120257057}, "qaoa6": {"drift_value_pct": 0.09081182208600631, "n_significant": 6, "static_arm": 5, "linear_drift_value_pct": 0.0}, "qft3": {"drift_value_pct": 0.11302364072773279, "n_significant": 10, "static_a`
+
+**Figures.** `figures/best_arm_ghz4.png`, `figures/best_arm_ghz8.png`, `figures/best_arm_grover3.png`, `figures/best_arm_qaoa6.png`, `figures/best_arm_qft3.png`, `figures/drift_value.png`, `figures/proxy_per_day.png`, `figures/regret_ghz4.png`, `figures/regret_ghz8.png`, `figures/regret_grover3.png`, `figures/regret_qaoa6.png`, `figures/regret_qft3.png`
