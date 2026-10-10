@@ -33,21 +33,7 @@
    "T1",
    "T2"
   ],
-  "cv_accuracy": NaN,
-  "majority_rate": 0.9958333333333333,
-  "coef": [
-   [
-    0.39546994089990817,
-    -0.48824625142830247,
-    -0.5240259737023969,
-    -0.32779470186388254
-   ]
-  ],
-  "classes": [
-   1,
-   5
-  ],
-  "switches": 1,
+  "switches": 0,
   "switches_within_1_day_of_recal": 0,
   "base_rate_near_recal": 0.5083333333333333
  },
@@ -86,8 +72,8 @@
    6,
    7
   ],
-  "switches": 2,
-  "switches_within_1_day_of_recal": 1,
+  "switches": 3,
+  "switches_within_1_day_of_recal": 2,
   "base_rate_near_recal": 0.5083333333333333
  },
  "qaoa6": {
