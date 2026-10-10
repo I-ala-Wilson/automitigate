@@ -215,14 +215,14 @@ class Queue:
 
     # ---------------------------------------------------------------- status
     def status_block(self, done="", blocked="none", nxt="", needs="none"):
-        with open(STATUS, "a") as fh:
+        with open(STATUS, "a", encoding="utf-8") as fh:
             fh.write(f"\n## {stamp()}  {self.tag}\ndone: {done}\nblocked: {blocked}\nnext: {nxt}\nneeds-other-side: {needs}\n")
 
     def heartbeat(self, stage, progress, force=False):
         if not force and time.time() - self.last_heartbeat < 1800:
             return
         self.last_heartbeat = time.time()
-        (DATA / f"heartbeat_{self.laptop}.txt").write_text(
+        (DATA / f"heartbeat_{self.laptop}.txt").write_text(encoding="utf-8", data=
             f"{now_et().isoformat(timespec='seconds')}\nstage: {stage}\nprogress: {progress}\n"
             f"max_seeds: {self.max_seeds}\nrungs: {self.rungs}\n")
         self.git_sync(light=True)
@@ -238,7 +238,7 @@ class Queue:
         log = ROOT / "logs" / f"{self.laptop}_{name}.log"
         log.parent.mkdir(exist_ok=True)
         progress = "starting"
-        with open(log, "a") as lf:
+        with open(log, "a", encoding="utf-8") as lf:
             p = subprocess.Popen(argv, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
             last_tick = 0.0
             for line in p.stdout:
@@ -255,7 +255,7 @@ class Queue:
                     self.heartbeat(name, progress)
             p.wait()
         if p.returncode != 0:
-            tail = "".join(open(log).readlines()[-30:])
+            tail = "".join(open(log, encoding="utf-8", errors="replace").readlines()[-30:])
             raise RuntimeError(f"{name} exited {p.returncode}\n{tail}")
         if after:
             after()
@@ -265,7 +265,7 @@ class Queue:
         if name.startswith("Q2_seed"):
             self.pass_durations.append(secs)
             self.ladder(secs)
-        self.marker(name).write_text(f"{stamp()} {secs:.0f}s\n")
+        self.marker(name).write_text(f"{stamp()} {secs:.0f}s\n", encoding="utf-8")
         self.status_block(done=f"{name} finished in {secs / 60:.0f} min (ladder: max_seeds={self.max_seeds}, rungs={self.rungs or 'none'})",
                           nxt="next runnable stage")
         self.tick(f"{name} done in {secs / 60:.0f} min")
