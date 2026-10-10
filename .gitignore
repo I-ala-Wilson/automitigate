@@ -13,3 +13,5 @@ figures/*.pdf
 node_modules/
 logs/
 data/ibm/*_seed*.jsonl
+data/ionq_like/*.jsonl
+data/calib/*.jsonl

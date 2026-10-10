@@ -19,7 +19,13 @@ from automitigate.arms import ARMS  # noqa: E402
 
 
 def load(grid):
-    rows = [json.loads(l) for l in open(grid) if l.strip()]
+    import gzip
+    grid = str(grid)
+    if not Path(grid).exists() and Path(grid + ".gz").exists():
+        grid = grid + ".gz"
+    opener = gzip.open if grid.endswith(".gz") else open
+    with opener(grid, "rt") as fh:
+        rows = [json.loads(l) for l in fh if l.strip()]
     rows = [r for r in rows if r["source"] == "aer_static"]
     cells = collections.defaultdict(lambda: collections.defaultdict(list))
     for r in rows:

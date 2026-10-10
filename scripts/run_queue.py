@@ -176,20 +176,26 @@ class Queue:
                 return False
         return True
 
-    def gzip_pass(self, k):
-        src = DATA / "ibm" / f"{self.laptop}_seed{k}.jsonl"
-        if src.exists():
+    def gzip_file(self, src):
+        src = Path(src)
+        if src.exists() and src.suffix == ".jsonl":
             with open(src, "rb") as fi, gzip.open(str(src) + ".gz", "wb") as fo:
                 shutil.copyfileobj(fi, fo)
             src.unlink()
 
+    def gzip_pass(self, k):
+        self.gzip_file(DATA / "ibm" / f"{self.laptop}_seed{k}.jsonl")
+
     # ---------------------------------------------------------------- git
-    def git_sync(self):
-        """Commit everything the queue produced, pull --rebase, push with retries."""
-        sh(["git", "add", "-A", "data", "STATUS.md"], check=False)
-        for extra in ("figures", "docs/results.md"):
-            if (ROOT / extra).exists():
-                sh(["git", "add", "-A", extra], check=False)
+    def git_sync(self, light=False):
+        """Commit what the queue produced (light = heartbeat + STATUS only), pull --rebase, push."""
+        if light:
+            sh(["git", "add", "-A", "STATUS.md", f"data/heartbeat_{self.laptop}.txt"], check=False)
+        else:
+            sh(["git", "add", "-A", "data", "STATUS.md"], check=False)
+            for extra in ("figures", "docs/results.md"):
+                if (ROOT / extra).exists():
+                    sh(["git", "add", "-A", extra], check=False)
         if sh(["git", "diff", "--cached", "--quiet"], check=False).returncode != 0:
             sh(["git", "commit", "-q", "-m", f"{self.tag} queue: {self.line or 'update'}"], check=False)
         for attempt in range(5):
@@ -219,7 +225,7 @@ class Queue:
         (DATA / f"heartbeat_{self.laptop}.txt").write_text(
             f"{now_et().isoformat(timespec='seconds')}\nstage: {stage}\nprogress: {progress}\n"
             f"max_seeds: {self.max_seeds}\nrungs: {self.rungs}\n")
-        self.git_sync()
+        self.git_sync(light=True)
 
     def tick(self, text):
         lp = self.last_push.strftime("%H:%M") if self.last_push else "never"
@@ -253,6 +259,8 @@ class Queue:
             raise RuntimeError(f"{name} exited {p.returncode}\n{tail}")
         if after:
             after()
+        if "--out" in argv:
+            self.gzip_file(ROOT / argv[argv.index("--out") + 1])
         secs = time.time() - t0
         if name.startswith("Q2_seed"):
             self.pass_durations.append(secs)
