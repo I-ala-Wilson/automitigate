@@ -7,7 +7,7 @@ name = "automitigate"
 version = "0.1.0"
 description = "A bandit that auto-tunes quantum error-mitigation settings per circuit, per machine, per hour, using a mirror-circuit reward that needs no ideal answer."
 readme = "README.md"
-authors = [{ name = "Ian Wilson" }, { name = "Thomas" }]
+authors = [{ name = "Ian Wilson" }, { name = "Thomas Sebahi" }]
 license = { file = "LICENSE" }
 requires-python = ">=3.11"
 dependencies = [

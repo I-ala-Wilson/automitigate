@@ -57,4 +57,4 @@ pytest -q
 
 ## Team
 
-Ian Wilson (McGill) and Thomas (McGill).
+Ian Wilson (McGill) and Thomas Sebahi (McGill).
