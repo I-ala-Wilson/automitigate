@@ -591,7 +591,8 @@ def main():
              "sensitivity": lambda: cmd_sensitivity(df), "pareto": lambda: cmd_pareto(df),
              "figures": lambda: cmd_figures(df, a.quick), "results-md": lambda: cmd_results_md(df)}
     if a.cmd == "all":
-        order = ["headline", "learners", "best-arm", "proxy", "drivers", "sensitivity", "pareto", "figures", "results-md"]
+        order = ["headline", "learners", "best-arm", "proxy", "drivers", "sensitivity", "pareto", "figures", "results-md", "export"]
+        steps["export"] = lambda: __import__("subprocess").run([sys.executable, str(ROOT / "scripts" / "export_replay.py")], check=True)
         if a.final:
             steps["learners4"] = lambda: cmd_learners(df, 4)
             order.insert(2, "learners4")
