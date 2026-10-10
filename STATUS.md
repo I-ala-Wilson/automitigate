@@ -99,3 +99,9 @@ done: automitigate/learners.py (6 learners + fixed policies + replay episode, te
 blocked: none
 next: automitigate/forward.py + sweep --forward (Q2b), qollab/spot_check (single-circuit runs), web/.
 needs-other-side: none.
+
+## 2026-10-09 23:32 ET  [thomas]
+done: Q2_seed1 finished in 12 min (ladder: max_seeds=20, rungs=none)
+blocked: none
+next: next runnable stage
+needs-other-side: none
