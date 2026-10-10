@@ -1,22 +1,22 @@
 {
  "exp_zne": {
   "ghz4": {
-   "drift_value_pct": 0.03841927580424372,
-   "n_significant": 11,
+   "drift_value_pct": 0.028330000108400893,
+   "n_significant": 8,
    "static_arm": 5,
-   "linear_drift_value_pct": 0.0310684619432444
+   "linear_drift_value_pct": 0.018061422973415717
   },
   "ghz8": {
-   "drift_value_pct": 0.024601478825323785,
-   "n_significant": 7,
+   "drift_value_pct": 0.00810640506076921,
+   "n_significant": 4,
    "static_arm": 5,
-   "linear_drift_value_pct": 0.015358404433369116
+   "linear_drift_value_pct": 0.0033652974065799253
   },
   "grover3": {
-   "drift_value_pct": 1.080453531443339,
-   "n_significant": 15,
+   "drift_value_pct": 0.9378992275725705,
+   "n_significant": 12,
    "static_arm": 5,
-   "linear_drift_value_pct": 0.00800974645613401
+   "linear_drift_value_pct": 0.015398767066564787
   },
   "qaoa6": {
    "drift_value_pct": 0.06452684728065058,
@@ -29,6 +29,35 @@
    "n_significant": 8,
    "static_arm": 5,
    "linear_drift_value_pct": 0.020899563833438203
+  }
+ },
+ "f03": {
+  "ghz4": {
+   "drift_value_pct": 0.0,
+   "n_significant": 0,
+   "static_arm": 5,
+   "f0_same_seeds": {
+    "drift_value_pct": 0.018061422973415717,
+    "n_significant": 8,
+    "static_arm": 5
+   }
+  },
+  "qft3": {
+   "drift_value_pct": 0.004846711464441868,
+   "n_significant": 0,
+   "static_arm": 5,
+   "f0_same_seeds": {
+    "drift_value_pct": 0.02527071906374965,
+    "n_significant": 2,
+    "static_arm": 5
+   }
+  }
+ },
+ "median_chain": {
+  "ghz4": {
+   "drift_value_pct": 0.36513833499974385,
+   "n_significant": 9,
+   "static_arm": 5
   }
  }
 }
