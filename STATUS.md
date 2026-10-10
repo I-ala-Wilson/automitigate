@@ -83,3 +83,8 @@ done: Q2_seed0 finished in 17 min (ladder: max_seeds=20, rungs=none)
 blocked: none
 next: next runnable stage
 needs-other-side: none
+
+## 2026-10-09 23:35 ET  [thomas]
+done: Q2_seed0 pushed (17 min on the Yoga).
+blocked: the queue's push got stuck mid-rebase on a conflict in data/calib/chains.json: both laptops write it (Mac: sizes 3/4/8, Yoga: sizes 3/6; size 3 identical). Resolved by hand as the union of both, pushed. The queue's later pulls would have stayed stuck until then.
+needs-other-side: Ian: make chains.json single-writer or per-laptop (chains_<laptop>.json), or it will conflict again the next time either side rewrites it.
