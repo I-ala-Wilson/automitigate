@@ -193,7 +193,7 @@ class Queue:
         if sh(["git", "diff", "--cached", "--quiet"], check=False).returncode != 0:
             sh(["git", "commit", "-q", "-m", f"{self.tag} queue: {self.line or 'update'}"], check=False)
         for attempt in range(5):
-            r = sh(["git", "pull", "-q", "--rebase"], check=False)
+            r = sh(["git", "pull", "-q", "--rebase", "--autostash"], check=False)
             if r.returncode != 0:
                 sh(["git", "rebase", "--abort"], check=False)
                 time.sleep(10 * 2 ** attempt)
@@ -205,7 +205,7 @@ class Queue:
         return False
 
     def git_pull(self):
-        sh(["git", "pull", "-q", "--rebase"], check=False)
+        sh(["git", "pull", "-q", "--rebase", "--autostash"], check=False)
 
     # ---------------------------------------------------------------- status
     def status_block(self, done="", blocked="none", nxt="", needs="none"):
