@@ -58,3 +58,9 @@ done: queue started on thomas (win32, python 3.12.10)
 blocked: none
 next: first runnable stage
 needs-other-side: none
+
+## 2026-10-09 23:10 ET  [thomas]
+done: E0 v2 run on Qollab, IonQ Aria-1 simulator; JSON in data/e0.json.
+blocked: the single 47-circuit list job is rejected: IonQAPIError 400 "Only job type ionq.circuit.v1 is supported". Combined with v1 ("only one job is allowed per code run"), Qollab's IonQ simulator takes ONE circuit per code run. max_circuits = null, 0.6 s.
+next: Ian's call on E0/E4/live mode given one circuit per run (e.g. a tiny E0 with one circuit, or run probes as separate Runs).
+needs-other-side: Ian.
