@@ -1,67 +1,67 @@
-# AutoMitigate, demo video script (v2, Sunday)
+# AutoMitigate, demo video script (v3)
 
-Normal speaking pace, about 2 minutes 50 seconds. The number in brackets is the slide on screen; CUES.md has the exact timings.
+Read it as one explanation, not sixteen captions. The number in brackets is the slide on screen when you reach that line; CUES.md has the timings. About 2 minutes 50 seconds.
 
-**[1] Title**
+**[1]**
 
-AutoMitigate. A bandit that picks your error-mitigation settings for you.
+This is AutoMitigate. It picks your error-mitigation settings for you, because nobody can keep picking them by hand.
 
-**[2] Noisy answers, three fixes**
+**[2]**
 
-Quantum computers give you slightly wrong answers. There are software tricks that clean them up: zero-noise extrapolation, Pauli twirling, readout mitigation.
+A quantum computer gives you a slightly wrong answer, and there are three well-known tricks for cleaning it up. You run at higher noise and extrapolate back to zero, you wrap each two-qubit gate in random Pauli flips, or you measure the detector's bias and subtract it.
 
-**[3] It depends on the day**
+**[3]**
 
-Each one helps on some circuits and hurts on others, and the machine's error rates move around from day to day. Nobody works that out by hand.
+Each one helps on some circuits and hurts on others, and the error they fight is not constant. This is the two-qubit error on the qubits we used, over nine months, and it jumps at every recalibration. So the right combination depends on your circuit, your machine, and the day.
 
-**[4] Treat it as a bandit**
+**[4]**
 
-AutoMitigate treats it as a bandit problem, the same maths as A/B testing. Eight arms, one for every way of switching the three tricks on or off. Pull one, score it, update, pull again.
+So we made the computer choose. We treat it as a bandit, the same maths as A/B testing. Eight arms, one per way of switching the three tricks on or off. Pull an arm, score it, update, pull again, and the learner settles on whatever keeps scoring best.
 
-**[5] The score is a mirror circuit**
+**[5]**
 
-The score comes from a mirror circuit. Run your circuit, scramble it with a random layer of Paulis, run it backwards. The right answer is one bitstring you already know, so there is no ideal simulation to run.
+The scoring is the part I find most interesting. We run the circuit, scramble it with random Paulis, then run it backwards, so the right answer is one bitstring we already know. The score is how often it comes out. We never simulate the ideal result, which is why this works on circuits whose answer nobody knows.
 
-**[6] On Qollab**
+**[6]**
 
-On Qollab. We pick GHZ on eight qubits and the real-drift data, hit Run, and it replays nine months of actual IBM calibration logs, one pull per day.
+Here it is on Qollab. We pick GHZ on eight qubits and the real-drift data, press Run, and it replays nine months of real IBM calibration logs, one pull per day.
 
-**[7] The chart**
+**[7]**
 
-The top panel is regret against an oracle that knows the best arm every day. Our learner is the thick line. Below it, the arm it picked each day.
+The top panel is regret, the score you lose by not pulling each day's best arm. Blue is our learner, green dashed is switching everything on. Below, the arm it picked each day. It finds the right one in the first week and sits on it.
 
-**[8] Then a real run**
+**[8]**
 
-Then it runs the circuit for real on whichever simulator you chose, raw and with readout mitigation. Raw 0.82, mitigated 0.94, ideal 1.
+Then the circuit runs for real on the simulator you chose, raw and with readout mitigation. On IBM's Fez model, 0.82 raw, 0.94 mitigated, where a noiseless machine gives 1.
 
-**[9] What we found**
+**[9]**
 
-We wrote the analysis down before we had any data. Across 240 days of ibm_fez the best setting never changed. A perfect tracker would gain less than a hundredth of a percent over picking once.
+What surprised us is this. We wrote the analysis down before we had data, and across 240 days the best setting never changed. A tracker that knew the right arm every day would gain less than a hundredth of a percent over picking once.
 
-**[10] Every day the same arm**
+**[10]**
 
-ZNE plus readout mitigation won every single day. So picking once is as good as tracking.
+That is because ZNE with readout mitigation won every single day. On this chain, picking once is as good as tracking.
 
-**[11] The bandit's job**
+**[11]**
 
-The bandit's job is just to find that setting cheaply, and epsilon-greedy does. It beats switching everything on by 45 to 79 percent in regret.
+So the bandit's real job is to find that setting cheaply, and epsilon-greedy does, with 45 to 79 percent less regret than switching everything on.
 
-**[12] Is the score honest?**
+**[12]**
 
-We checked the mirror score against the real forward error, day by day. Its ranking of the eight arms agrees with the truth at a Spearman correlation of 0.6 to 0.9, and the arm it picks costs at most 8 percent of the worst one.
+The obvious doubt is whether a mirror score says anything about your real circuit, so we checked day by day. Its ranking of the arms agrees with the true error at 0.6 to 0.9, and its pick costs at most 8 percent of the worst arm.
 
-**[13] A different machine**
+**[13]**
 
-Same tool on an IonQ-style model where the noise jumps halfway through. Nothing changes here either, and the chart shows what exploring costs when there is nothing to find.
+Against an IonQ-style model where the noise jumps halfway, the best setting still does not move, so the gap is just the cost of checking.
 
-**[14] Checked against IonQ's simulator**
+**[14]**
 
-We also checked the model against Qollab's own Aria-1 simulator on identical circuits.
+And that model agrees with Qollab's own Aria-1 simulator on identical circuits, job IDs in the repo.
 
-**[15] One caveat**
+**[15]**
 
-One thing we did find. On a worse set of qubits the best setting did drift, nine switches in nine months. Tracking matters exactly where the hardware is worse.
+The caveat is that this held on good qubits. On a middling chain the best setting did drift, nine switches in nine months, so tracking matters exactly where the hardware is worse.
 
-**[16] The end**
+**[16]**
 
-Everything is open source under MIT, pip-installable. Built this weekend by Ian Wilson and Thomas Sebahi at McGill. AutoMitigate.
+It is open source under MIT, installs with pip, and every number comes from committed tables. Thomas Sebahi and I built it this weekend at McGill. Thanks for watching.
