@@ -37,7 +37,12 @@ To reproduce the tables: `pip install -e ".[sweep,dev]"`, `pytest -q`, then `pyt
 
 ## Results
 
-<!-- paste the first paragraph(s) of docs/results.md here, then one sentence each on: regret chart, arm-switch strip, per-day proxy validation. -->
+Pre-registered before the data existed, 20 seeds, 240 daily snapshots of real ibm_fez calibration data (Feb 1 to Oct 9 2026). On the best chain the best mitigation setting was stationary on all five circuits: the drift value, what a perfect per-day tracker gains over the best fixed setting, is at most 0.01 % of the static oracle (ghz4 0.00, ghz8 0.00, grover3 0.01 with 2 significant switches, qaoa6 0.00, qft3 0.00 with 1 significant switch), and ZNE + readout mitigation (arm 5) is the best fixed setting every time. A setting chosen once is as good as tracking; the bandit's job is to find it cheaply. ε-greedy does: dynamic pseudo-regret 1.60 / 3.26 / 3.08 / 3.19 / 2.16 (ghz4 / ghz8 / grover3 / qaoa6 / qft3) against 4.46 / 11.47 / 14.87 / 13.73 / 3.96 for the everything-on default, 45–79 % lower, with 95 % intervals in `docs/results.md`. The Thompson family sits between the two, UCB1 is worst. On the median-ranked chain the best setting did move, drift value 0.37 % with 9 significant switches on ghz4, so tracking matters where the hardware is worse.
+
+- **Regret chart** (`figures/regret_*.png`, and the top panel of every Run): cumulative pseudo-regret against the per-day oracle for the learner, plain Thompson, the everything-on default and the best fixed arm; the learner's curve flattens once it locks onto arm 5.
+- **Arm-choice strip** (`figures/best_arm_*.png`, bottom panel of every Run): the arm chosen each day over the per-day best arm; one forced pass over all eight arms, then arm 5 with the 10 % exploration dots.
+- **Per-day proxy validation** (`figures/proxy_per_day.png`): the mirror score's ranking of the eight arms agrees with the real forward error at a median Spearman correlation of 0.88 / 0.93 / 0.62 (ghz4 / grover3 / qft3), and the arm it picks costs at most 8 % of the worst arm's forward error, so the tool works without ever knowing the circuit's answer.
+- **IonQ-like source**: on the jump schedule the everything-on arm stays best on both sides, so that replay shows the cost of exploration when there is nothing to track; the local model agrees with Qollab's Aria-1 simulator to mean |ΔP| = 0.027 on 8 identical single circuits.
 
 ## What is new
 
