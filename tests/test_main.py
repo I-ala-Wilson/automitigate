@@ -1,5 +1,6 @@
 """The demo entry point and the Qollab bundle."""
 import io
+import sys
 import zipfile
 from contextlib import redirect_stdout
 from pathlib import Path
@@ -7,6 +8,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
 
 def test_replay_runs_and_recommends(monkeypatch):
