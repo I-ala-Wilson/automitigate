@@ -5,9 +5,10 @@ Press Run. The form under Run settings picks the circuit, the data source and th
 Replay mode needs no backend: the learner is replayed on reward tables committed in data/replay/,
 recorded on two laptops from (a) a per-day noise model rebuilt from nine months of real
 ibm_fez calibration data and (b) an IonQ-like model with a synthetic drift schedule.
-After the replay, one real pull of the recommended setting's mirror circuit is executed on
-the selected backend (the free built-in simulator by default; Qollab allows one circuit per run
-on IonQ backends), so a Run always executes a quantum circuit too. live = False skips it.
+After the replay, the chosen circuit is executed for real on the selected backend, raw and
+with readout-error mitigation from two calibration circuits in the same job, so a Run always
+executes quantum circuits too (pick an IBM noise-model simulator to see the noise; on IonQ
+backends, which accept one circuit per job, only the raw run is made). live = False skips it.
 """
 import json
 
@@ -160,32 +161,58 @@ def main(circuit: str = "ghz8", source: str = "ibm", schedule: str = "jump", lea
 
     if live:
         try:
-            live_pull(circuit, rec)
+            live_run(circuit, rec)
         except Exception as exc:
             print(f"(live pull skipped: {type(exc).__name__}: {str(exc)[:160]})")
 
 
-def live_pull(circuit, arm):
-    """One real pull on the selected backend: the randomised mirror circuit of the chosen
-    circuit, one circuit only (Qollab's IonQ backends allow one job per run). On the ideal
-    built-in simulator P(target) is 1; on a noise-model backend it is the arm-0 mirror score."""
+LIVE_SHOTS = 1000
+OBS_LABEL = {"parity": "<Z...Z> parity", "marked": "P(marked |101>)", "pauli": "<P> (largest ideal Pauli)",
+             "maxcut": "<C> MaxCut value"}
+
+
+def live_run(circuit, arm):
+    """Run the chosen circuit forward on the selected backend, with the two readout-calibration
+    circuits in the same job, and print raw vs readout-mitigated vs ideal. Qollab's compiler
+    cancels folded and mirrored structure, so ZNE and mirror scoring cannot run here; readout
+    mitigation is the part of the recommended arm that survives compilation."""
     try:
-        from automitigate.arms import apply_arm, transpile_once
-        from automitigate.circuits import CIRCUITS
-        from automitigate.score import frac_target
+        from automitigate.arms import apply_rem, rem_calibration_circuits
+        from automitigate.forward import estimate, spec
     except Exception as e:
         print(f"live mode needs the automitigate package in the project ({e})")
         return
-    qc = CIRCUITS[circuit]()
-    qc_t = transpile_once(qc, list(range(qc.num_qubits)), seed=0)
-    circs, target = apply_arm(qc_t, {"zne": 0, "twirl": 0, "rem": 0}, twin_rng_seed=0)
-    qc = circs[0]
-    n2q = sum(v for g, v in qc.count_ops().items() if g in ("cz", "rzz"))
+    sp = spec(circuit)
+    fwd = sp["circuit"].copy()
+    fwd.measure_all()
+    cal0, cal1 = rem_calibration_circuits(sp["n"])
+    n2q = sum(v for g, v in fwd.count_ops().items() if g in ("cx", "cz", "rzz", "ecr"))
     name = getattr(backend, "name", None) or type(backend).__name__  # noqa: F821
-    print(f"\nLive pull on {name}: randomised mirror circuit of {circuit} ({qc.num_qubits} qubits, {n2q} two-qubit gates, "
-          f"target bitstring {target}), 1200 shots ...")
-    job = backend.run(qc, shots=1200)  # noqa: F821
-    counts = {str(k).replace(" ", ""): v for k, v in job.result().get_counts().items()}
-    top = sorted(counts.items(), key=lambda kv: -kv[1])[:3]
-    print(f"P(target) = {frac_target(counts, target):.3f}; top outcomes {top}. This is the arm-0 shape; the recommended "
-          f"arm {arm} ({ARM_LABEL[arm]}) adds its extra circuits on top, which the replay tables already contain.")
+    print(f"\nLive run on {name}: {circuit} forward ({sp['n']} qubits, {n2q} two-qubit gates), "
+          f"{LIVE_SHOTS} shots + 2 readout-calibration circuits ...")
+    cal = None
+    try:
+        res = backend.run([fwd, cal0, cal1], shots=LIVE_SHOTS).result()  # noqa: F821
+        counts = _counts(res.get_counts(0))
+        cal = [_counts(res.get_counts(1)), _counts(res.get_counts(2))]
+    except Exception as e:
+        print(f"(this backend accepts one circuit per job: {type(e).__name__}; readout calibration skipped)")
+        res = backend.run(fwd, shots=LIVE_SHOTS).result()  # noqa: F821
+        counts = _counts(res.get_counts())
+    raw = estimate(counts, sp)
+    label = OBS_LABEL[sp["kind"]]
+    if cal is not None:
+        mitigated = estimate(apply_rem(counts, cal), sp)
+        print(f"{label}: raw = {raw:.3f}, after readout mitigation = {mitigated:.3f}, ideal = {sp['ideal']:.3f}")
+    else:
+        print(f"{label}: raw = {raw:.3f}, ideal = {sp['ideal']:.3f}")
+    has_rem = bool(arm & 1)
+    print(f"Recommended arm {arm} ({ARM_LABEL[arm]}): "
+          + ("its readout mitigation is what you see applied above; " if has_rem else
+             "it does not use readout mitigation (shown above for reference); ")
+          + "ZNE folds and the mirror reward cannot run through Qollab's compiler, which cancels folded "
+            "and mirrored structure, so the full arm is scored offline in the replay tables.")
+
+
+def _counts(c):
+    return {str(k).replace(" ", ""): int(v) for k, v in c.items()}

@@ -467,3 +467,9 @@ done: E0 v3 = qollab/e0_ladder.py, 4 Runs the compiler cannot cancel (4-qubit CX
 blocked: none
 next: video tonight; Sunday 09:00 final regenerate; if the ladder runs land by 11:30 Sunday, refit, rerun the IonQ-like table (2.5 h), re-export, re-zip before the 14:00 freeze.
 needs-other-side: Thomas, Sunday morning, 10 min, optional but worth it: `git pull`, delete data/e0_runs.jsonl, on the IonQ Aria-1 noise-model simulator run qollab/e0_ladder.py with RUN = 1, 2, 3, 4 (one circuit each), append the four printed lines to data/e0_runs.jsonl, commit `[thomas] e0 ladder runs`, push. Run 4 should print P(target) clearly below 1.
+
+## 2026-10-10 20:50 ET  [ian]
+done: probe on Qollab's IBM Fez noise-model simulator (throwaway draft project, never published): list jobs accepted (12 circuits in one job, ~8 s); real gate noise (144-CX ladder decays 0.97 -> 0.89); but an identity CX chain stays at P = 0.98 at any depth, with or without barriers, so the compiler cancels inverse structure there too (threat 10 now covers all Qollab backends). Consequence: the "paste your circuit, measure all 8 arms" idea is not viable (ZNE folds and the mirror twin are compiled away). Demo live step rewritten instead: main.py `live_run` executes the chosen circuit forward on the selected backend plus the two readout-calibration circuits in one job and prints raw vs readout-mitigated vs ideal (IonQ backends: raw only, says so). forward.py added to the Qollab bundle; project card, video script shot 3 and analysis_plan typo log updated. 37 tests pass.
+blocked: none
+next: upload the rebuilt zip to the scratch project, verify on Built-in and on IBM Fez (time it); Ian re-records the two Qollab clips with IBM -> Fez selected; Sunday 09:00 final regenerate + zip.
+needs-other-side: Thomas: README and project card still untouched as of 20:50; Sunday 14:30 re-upload uses the zip built after this commit.

@@ -31,7 +31,7 @@ Two data sources, both simulated locally with Qiskit Aer: (1) a per-day noise mo
 
 ## How to run it
 
-Press **Run** with no backend selected: the form under Run settings picks the circuit (ghz4, qft3, grover3, ghz8, qaoa6), the source (ibm or ionq), the drift schedule and the learner; the replay uses the committed reward tables and finishes in a few seconds, showing the regret chart, the arm-switch strip and a recommendation with a Qiskit snippet. With an IonQ backend selected and `live = True`, the recommended setting is also run once on that backend (Qollab allows one circuit per run).
+Press **Run** with no backend selected: the form under Run settings picks the circuit (ghz4, qft3, grover3, ghz8, qaoa6), the source (ibm or ionq), the drift schedule and the learner; the replay uses the committed reward tables and finishes in a few seconds, showing the regret chart, the arm-switch strip and a recommendation with a Qiskit snippet. With `live = True` the chosen circuit is also executed on the selected backend, raw and with readout mitigation from two calibration circuits in the same job; pick an IBM noise-model simulator to see the noise (IonQ backends accept one circuit per job, so there only the raw run is made).
 
 To reproduce the tables: `pip install -e ".[sweep,dev]"`, `pytest -q`, then `python scripts/run_queue.py --laptop ian --dry-run` lists every sweep stage; `docs/analysis_plan.md` has the pre-registered definitions.
 

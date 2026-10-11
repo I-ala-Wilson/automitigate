@@ -146,3 +146,4 @@ simulator on the same circuits (mean absolute score difference).
   defaults; the spot check is informative only on cells where injected errors survive compilation. ZNE by folding is
   not executable through Qollab's IonQ backends without native-gate control. The IBM study is unaffected (Aer applies
   no optimisation after basis translation).
+- 2026-10-10 20:40 ET, threat 10 extended (finding): the same cancellation happens on Qollab's IBM noise-model simulators (Aer `fake_fez` in the browser): an identity CX chain stays at P = 0.98 at any depth, with or without barriers, while a non-cancellable CX ladder decays (0.97 at 0 CX to 0.89 at 144 CX). List jobs are accepted there (12 circuits in one job). The demo's live step therefore runs the forward circuit with readout mitigation only; ZNE and mirror scoring stay offline.

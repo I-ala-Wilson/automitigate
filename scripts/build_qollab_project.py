@@ -18,7 +18,7 @@ MAX_FILES = 100
 
 ALWAYS = ["main.py", "README.md", "LICENSE", "requirements.txt",
           "automitigate/__init__.py", "automitigate/learners.py", "automitigate/arms.py",
-          "automitigate/circuits.py", "automitigate/score.py",
+          "automitigate/circuits.py", "automitigate/score.py", "automitigate/forward.py",
           "docs/analysis_plan.md", "docs/results.md", "docs/project_card.md"]
 GLOBS = ["data/replay/*.json", "figures/*.png", "docs/diagrams/*.png"]
 
