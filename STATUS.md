@@ -491,3 +491,9 @@ done: final regenerate (`analysis.py all --final`): every headline, learner, pro
 blocked: none
 next: video link into README + card when Ian sends it; 12:00 arXiv re-check; Thomas 14:30 upload, 16:00 Publish, 17:00 Submit.
 needs-other-side: Thomas: README review + project card; the 14:30 upload must use the zip from HEAD.
+
+## 2026-10-11 09:01 ET  [thomas]
+done: queue finished (until reached)
+blocked: none
+next: nothing; freeze
+needs-other-side: none
