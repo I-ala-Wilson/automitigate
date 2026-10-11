@@ -191,14 +191,21 @@ def live_run(circuit, arm):
     print(f"\nLive run on {name}: {circuit} forward ({sp['n']} qubits, {n2q} two-qubit gates), "
           f"{LIVE_SHOTS} shots + 2 readout-calibration circuits ...")
     cal = None
-    try:
-        res = backend.run([fwd, cal0, cal1], shots=LIVE_SHOTS).result()  # noqa: F821
-        counts = _counts(res.get_counts(0))
-        cal = [_counts(res.get_counts(1)), _counts(res.get_counts(2))]
-    except Exception as e:
-        print(f"(this backend accepts one circuit per job: {type(e).__name__}; readout calibration skipped)")
+    if "ionq" in str(name).lower():
+        # Qollab allows one job per run and one circuit per job on IonQ backends; a rejected list
+        # job still counts as the run's one job, so do not try it.
+        print("(IonQ backends on Qollab accept one circuit per run; readout calibration skipped)")
         res = backend.run(fwd, shots=LIVE_SHOTS).result()  # noqa: F821
         counts = _counts(res.get_counts())
+    else:
+        try:
+            res = backend.run([fwd, cal0, cal1], shots=LIVE_SHOTS).result()  # noqa: F821
+            counts = _counts(res.get_counts(0))
+            cal = [_counts(res.get_counts(1)), _counts(res.get_counts(2))]
+        except Exception as e:
+            print(f"(this backend accepts one circuit per job: {type(e).__name__}; readout calibration skipped)")
+            res = backend.run(fwd, shots=LIVE_SHOTS).result()  # noqa: F821
+            counts = _counts(res.get_counts())
     raw = estimate(counts, sp)
     label = OBS_LABEL[sp["kind"]]
     if cal is not None:
