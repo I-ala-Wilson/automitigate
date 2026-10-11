@@ -485,3 +485,9 @@ done: E0 v3 ladder runs done from Ian's account (probe draft project, IonQ Aria-
 blocked: none
 next: Ian's video; Sunday 09:00 final regenerate + zip (no table changes expected); Thomas Sunday: README review, card, 14:30 upload, 16:00 Publish, 17:00 Submit. Thomas's optional 11:00 ladder runs and 12:00 fresh-clone check are no longer needed.
 needs-other-side: Thomas: README review + project card tonight.
+
+## 2026-10-11 08:55 ET  [ian]
+done: final regenerate (`analysis.py all --final`): every headline, learner, proxy, drivers, sensitivity number and docs/results.md unchanged from last night; new data/analysis/learners_pulls4.json (4-pulls-per-day secondary table); replay tables re-exported (identical); qollab_project.zip rebuilt from this commit = the one Thomas uploads at 14:30.
+blocked: none
+next: video link into README + card when Ian sends it; 12:00 arXiv re-check; Thomas 14:30 upload, 16:00 Publish, 17:00 Submit.
+needs-other-side: Thomas: README review + project card; the 14:30 upload must use the zip from HEAD.
