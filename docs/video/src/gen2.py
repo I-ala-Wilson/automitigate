@@ -18,7 +18,7 @@ def P(title, body, sub=""): return page(title, f'<div class="content">{body}</di
 def foot(n): return ""
 def framed(path, h=700, w=1500, fw=None): return f'<div class="center" style="margin-top:22px"><div class="frame"><img src="file://{path}" style="{"width:"+str(fw)+"px;" if fw else ""}max-width:{w}px;max-height:{h}px;display:block"></div></div>'
 s={}
-s["01-title"]=page("", f'''<div class="content" style="margin-top:0"><div style="margin-top:0"><div style="font-size:88px;font-weight:700;letter-spacing:-2px">AutoMitigate</div>
+s["01-title"]=page("", f'''<div class="content"><div><div style="font-size:88px;font-weight:700;letter-spacing:-2px">AutoMitigate</div>
 <div style="font-size:30px;margin-top:22px">A bandit that picks your error-mitigation settings for you.</div>
 <div class="chip" style="margin-top:40px;font-size:16px">Ian Wilson · Thomas Sebahi · McGill University</div></div></div>{foot("1 of 16")}''')
 def sketch(kind):
@@ -59,7 +59,7 @@ s["05-mirror"]=P("The score is a mirror circuit", f'''<div style="position:relat
 <text x="750" y="350" font-size="34" font-weight="700" text-anchor="middle">score = how often that bitstring comes out</text>
 <text x="750" y="410" font-size="24" text-anchor="middle">no ideal simulation needed</text></svg></div>{foot("5 of 16")}''')
 s["06-qollab-run"]=P("On Qollab", framed(f"{H}/shots/console_table.png", 780, 1500)+foot("6 of 16"), "GHZ-8 on nine months of real ibm_fez calibration data, one pull per day.")
-s["07-chart"]=P("What comes out", framed(f"{H}/shots/chart_0.png", 760, 1500)+foot("7 of 16"), "Regret = score lost by not pulling the day's best arm. Blue = our learner · orange = plain Thompson · green dashed = everything on · red = best fixed arm. Below: the arm picked each day.")
+s["07-chart"]=P("What comes out", framed(f"{H}/shots/chart_0.png", 760, 1500)+foot("7 of 16"), "Regret = score lost by not pulling the day's best arm. Below: the arm picked each day.")
 s["08-live-run"]=P("Then the circuit runs for real on the simulator you chose", f'''<div style="display:flex;gap:18px;margin-top:60px">
 <div class="card" style="flex:1;text-align:center;padding:90px 40px"><div class="k">0.82</div><div class="kl">raw</div></div>
 <div class="card" style="flex:1;text-align:center;padding:90px 40px"><div class="k">0.94</div><div class="kl">after readout mitigation</div></div>
@@ -70,7 +70,7 @@ s["10-best-arm"]=P("Every day the same arm", '<div style="display:grid;grid-temp
 rows="".join(f"<tr><td>{c}</td><td>{e}</td><td>{a7}</td><td><b>{p}</b></td></tr>" for c,e,a7,p in [("ghz4","1.60","4.46","64 %"),("ghz8","3.26","11.47","72 %"),("grover3","3.08","14.87","79 %"),("qaoa6","3.19","13.73","77 %"),("qft3","2.16","3.96","45 %")])
 s["11-regret-table"]=P("Finding that setting cheaply", f'''<div style="display:flex;gap:18px;margin-top:40px"><div class="card" style="flex:1;text-align:center;padding:60px 30px"><div class="k">45–79 %</div><div class="kl">less regret than switching everything on</div></div><div class="card" style="flex:1.3"><table style="font-size:24px;width:100%"><tr><th>circuit</th><th>ε-greedy learner</th><th>everything switched on (arm 7)</th><th>learner is lower by</th></tr>{rows}</table>
 <p style="margin-top:14px">regret = score lost vs always picking the best arm, over 240 days. Lower is better.</p></div></div>{foot("11 of 16")}''')
-s["12-proxy"]=P("Is the score honest?", framed(f"{REPO}/figures/proxy_per_day.png", 800, 1500, fw=1160)+foot("12 of 16"), "Per day: does the mirror score rank the arms like the real error? Rank agreement 0.6 to 0.9; its pick costs at most 8 % of the worst arm.")
+s["12-proxy"]=P("Is the score honest?", framed(f"{REPO}/figures/proxy_per_day.png", 800, 1500, fw=1160)+foot("12 of 16"), "Rank agreement between the mirror score and the real error, per day.")
 s["13-ionq"]=P("A different machine", framed(f"{H}/shots/chart_1.png", 760, 1500)+foot("13 of 16"), "IonQ-like model, noise jumps at step 150. Everything-on stays best; the gap is the cost of checking.")
 s["14-spot-check"]=P("Checked against Qollab's Aria-1 simulator", f'''<div style="display:flex;gap:18px;margin-top:60px">
 <div class="card" style="flex:1;text-align:center;padding:90px 40px"><div class="k">0.027</div><div class="kl">mean difference in P(target), our model vs Qollab's Aria-1 simulator</div></div>
@@ -79,7 +79,7 @@ s["15-caveat"]=P("One caveat", f'''<div style="display:flex;gap:18px;margin-top:
 <div class="card" style="flex:1;text-align:center;padding:90px 40px"><div class="k">9</div><div class="kl">best-arm switches on a middling chain of qubits</div></div>
 <div class="card" style="flex:1;text-align:center;padding:90px 40px"><div class="k">0.37 %</div><div class="kl">drift value there, vs under 0.01 % on the best chain</div></div></div>
 <div class="card" style="margin-top:18px"><p style="font-size:20px"><b>Tracking matters exactly where the hardware is worse.</b></p></div>{foot("15 of 16")}''')
-s["16-end"]=page("", f'''<div class="content" style="margin-top:0"><div style="margin-top:0"><div style="font-size:88px;font-weight:700;letter-spacing:-2px">AutoMitigate</div>
+s["16-end"]=page("", f'''<div class="content"><div><div style="font-size:88px;font-weight:700;letter-spacing:-2px">AutoMitigate</div>
 <div class="chip" style="margin-top:30px;font-size:18px">github.com/I-ala-Wilson/automitigate</div>
 <div style="font-size:22px;margin-top:26px">MIT licence · pip install -e . · every number reproducible from the committed tables</div>
 <div style="font-size:22px;margin-top:60px">Ian Wilson · Thomas Sebahi · McGill University</div></div></div>{foot("16 of 16")}''')

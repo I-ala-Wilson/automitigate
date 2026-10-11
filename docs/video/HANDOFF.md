@@ -13,7 +13,7 @@ Ian's wifi is too poor to continue; Thomas (and his assistant) finish the video 
 2. Every title sits at the top-left at the same height on every slide; the content is centred in the space below. (Done in the current render; verify.)
 3. Caption words only where they make the slide clearer; otherwise none. The current captions are already cut down; cut further if a line adds nothing.
 4. No footer line, no "n of 16". Files are just 01 to 16.
-5. Check all 16 for visual errors and inconsistencies: nothing bleeding outside a card (slide 3 was fixed), numbers aligned across cards (slide 8 was fixed), fonts and card borders identical, no clipped text.
+5. Visual check done by Ian's assistant at 16:10 on all 16: titles top-left at one height, content centred, nothing clipped or bleeding, slide 13's legend moved above the strip, slides 1 and 16 centred. Re-check only if you re-render.
 6. Fill the frame: no slide should be mostly empty.
 7. Slides must show the results: 7 (demo regret chart), 9 (drift value), 10 (best arm per day, all five circuits), 11 (regret table), 12 (proxy validation), 13 (IonQ-like run), 14 (spot check), 15 (median-chain caveat).
 
