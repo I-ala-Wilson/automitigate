@@ -8,7 +8,7 @@ This is AutoMitigate. You give it your circuit and your machine, and it works ou
 
 **[2]**
 
-It exists because quantum computers are still noisy, and there are three standard ways to clean up the answer: run at higher noise and extrapolate back, wrap each two-qubit gate in random Pauli flips, or measure the detector's bias and subtract it.
+It exists because quantum computers are still noisy, and there are three standard ways to clean up the answer. You can run at higher noise and extrapolate back, wrap each two-qubit gate in random Pauli flips, or measure the detector's bias and subtract it.
 
 **[3]**
 
@@ -48,7 +48,7 @@ So the bandit's job is to find that setting cheaply, and epsilon-greedy does, wi
 
 **[12]**
 
-The same on all five circuits: the learner sits well below everything-on.
+It is the same on all five circuits, with the learner well below everything-on.
 
 **[13]**
 
