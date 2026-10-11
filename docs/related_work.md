@@ -31,4 +31,10 @@ None of the three evaluates non-stationary learners under real device drift; tha
 
 ## Re-check (Sunday 12:00)
 
-<!-- queries: "bandit error mitigation", "mirror circuit bandit", "non-stationary quantum mitigation"; add any 2026 hits here with one line each. -->
+Queries run 2026-10-11 11:35 ET on arXiv: "bandit quantum error mitigation selection", "mirror circuit reward adaptive error mitigation drift calibration", "non-stationary bandit quantum device drift mitigation". Already covered above: CMAB-ZNE (2608.06426), GSC-QEMit (2604.24551). New hits:
+
+- **QBalance, arXiv 2605.02966 (May 2026).** A workflow library that treats compilation, noise suppression and mitigation (measurement mitigation, ZNE, circuit cutting) as a finite multi-objective strategy-selection problem and orders candidates with Thompson sampling; the reward is a survival-product error proxy and no device drift over time is evaluated. Here: the arms are only the mitigation techniques, the reward is measured on the device (mirror circuit), and nine months of real calibration drift are replayed.
+- **Decision Kernels for QEM, arXiv 2607.02888 (July 2026).** Argues that expectation-value accuracy is the wrong benchmark when mitigated values feed a downstream decision (argmin, ranking, top-k), since such decisions depend on gaps, not absolute values. Relevant to our proxy validation: we report per-day rank agreement (Spearman) and the forward regret of the mirror-chosen arm, which are gap-type metrics, alongside top-1 agreement.
+- **Fast-feedback calibration and drift control, arXiv 2512.07815 (Dec 2025).** Shot-by-shot and definite-outcome feedback protocols that re-tune device parameters against drift in real time; no mitigation-technique selection. Complementary: it moves the hardware, we choose the software setting on top of whatever the hardware does.
+
+Nothing found that evaluates non-stationary learners over mitigation settings on real calibration history; the comparison in this repo remains, to our knowledge, the first.

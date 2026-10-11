@@ -497,3 +497,9 @@ done: queue finished (until reached)
 blocked: none
 next: nothing; freeze
 needs-other-side: none
+
+## 2026-10-11 11:40 ET  [ian]
+done: arXiv re-check (three queries) added to docs/related_work.md: QBalance 2605.02966, Decision Kernels 2607.02888, fast-feedback drift control 2512.07815, one line each on the difference; no paper evaluates non-stationary learners over mitigation settings on real calibration history.
+blocked: none
+next: video link into README + card when Ian sends it; Thomas 14:30 upload (zip from HEAD), 16:00 Publish, 17:00 Submit.
+needs-other-side: Thomas: README review + project card not seen in the repo yet as of 11:40.
