@@ -1,0 +1,36 @@
+{
+ "note": "Live runs of main.py's live_run on Qollab, Saturday 10 October 2026 evening, from the scratch project; values quoted in the README and the video.",
+ "runs": [
+  {
+   "backend": "fake_fez (IBM Fez noise-model simulator)",
+   "circuit": "ghz8",
+   "observable": "<Z...Z> parity",
+   "shots": 1000,
+   "raw": 0.858,
+   "readout_mitigated": 0.97,
+   "ideal": 1.0,
+   "time_et": "2026-10-10 21:0x"
+  },
+  {
+   "backend": "fake_fez (IBM Fez noise-model simulator)",
+   "circuit": "ghz8",
+   "observable": "<Z...Z> parity",
+   "shots": 1000,
+   "raw": 0.824,
+   "readout_mitigated": 0.942,
+   "ideal": 1.0,
+   "time_et": "2026-10-10 21:1x"
+  },
+  {
+   "backend": "ionq_simulator (Aria-1 noise model)",
+   "circuit": "ghz8",
+   "observable": "<Z...Z> parity",
+   "shots": 1000,
+   "raw": 0.892,
+   "readout_mitigated": null,
+   "ideal": 1.0,
+   "note": "one circuit per run on IonQ backends, calibration skipped",
+   "time_et": "2026-10-10 21:2x"
+  }
+ ]
+}

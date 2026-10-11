@@ -460,9 +460,9 @@ def cmd_figures(df, quick=False):
     if not quick:
         for c, h in head.items():
             fig, ax = plt.subplots(figsize=(7, 2.2))
-            ax.step(range(h["n_days"]), h["best_per_day"], where="mid", color="black", linewidth=1)
+            ax.step(range(h["n_days"]), h["best_per_day"], where="mid", color="black", linewidth=2)
             for t in h["significant_switches"]:
-                ax.axvline(t, color="0.6", linewidth=0.8)
+                ax.axvspan(t - 1.5, t + 1.5, color="0.82", linewidth=0, zorder=0)
             ax.set_yticks(range(K))
             ax.set_yticklabels(ARM_LABEL, fontsize=7)
             ax.set_xlabel("daily snapshot")

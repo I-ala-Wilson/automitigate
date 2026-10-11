@@ -1,6 +1,6 @@
 """Spot check of the local IonQ-like model against Qollab's Aria-1 simulator, ONE circuit per Run.
 
-Thomas, by hand, 8 Runs (about a minute each): set RUN = 1, press Run, copy the single line
+By hand, 8 Runs (about a minute each): set RUN = 1, press Run, copy the single line
 that starts with {"run": into data/ionq/spot_runs.jsonl (append), then RUN = 2 ... 8.
 Commit `[thomas] spot check runs`, push. scripts/spot_compare.py turns the file into
 data/ionq/spot_check.json and the comparison line in docs/results.md.

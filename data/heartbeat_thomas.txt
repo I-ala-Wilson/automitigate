@@ -1,5 +1,0 @@
-2026-10-11T08:41:53-04:00
-stage: idle
-progress: waiting
-max_seeds: 20
-rungs: []

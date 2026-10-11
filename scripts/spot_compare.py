@@ -1,4 +1,4 @@
-"""Compare Thomas's single-circuit Qollab runs with the local IonQ-like model on the same cells.
+"""Compare the single-circuit Qollab runs with the local IonQ-like model on the same cells.
 
   python scripts/spot_compare.py   # data/ionq/spot_runs.jsonl -> data/ionq/spot_check.json
 

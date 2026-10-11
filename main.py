@@ -101,7 +101,7 @@ def main(circuit: str = "ghz8", source: str = "ibm", schedule: str = "jump", lea
           f"{S} seed(s) per cell, learner = {learner}, {replays} replays.")
     print(f"Arms: " + ", ".join(f"{i} = {l}" for i, l in enumerate(ARM_LABEL)))
     if source == "ibm" and summary:
-        print(f"Pre-registered headline for {circuit}: drift value {summary['drift_value_pct']:.1f} % of the static oracle, "
+        print(f"Pre-registered headline for {circuit}: drift value {summary['drift_value_pct']:.2f} % of the static oracle, "
               f"{summary['n_significant']} significant best-arm switches ({summary['raw_flips']} raw flips) over {summary['n_days']} days "
               f"x {summary['n_seeds']} seeds; static oracle = arm {summary['static_arm']} ({ARM_LABEL[summary['static_arm']]}).")
 
@@ -163,7 +163,7 @@ def main(circuit: str = "ghz8", source: str = "ibm", schedule: str = "jump", lea
         try:
             live_run(circuit, rec)
         except Exception as exc:
-            print(f"(live pull skipped: {type(exc).__name__}: {str(exc)[:160]})")
+            print(f"(live run skipped: {type(exc).__name__}: {str(exc)[:160]})")
 
 
 LIVE_SHOTS = 1000

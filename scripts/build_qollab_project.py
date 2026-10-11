@@ -2,7 +2,7 @@
 
   python scripts/build_qollab_project.py   # -> qollab_project/ and qollab_project.zip
 
-Thomas drags qollab_project.zip onto the Qollab "Upload your own files" card (or into the file
+Drag qollab_project.zip onto the Qollab "Upload your own files" card (or into the file
 tree of the existing project). README.md becomes the project write-up automatically.
 """
 import shutil
@@ -20,7 +20,7 @@ ALWAYS = ["main.py", "README.md", "LICENSE", "requirements.txt",
           "automitigate/__init__.py", "automitigate/learners.py", "automitigate/arms.py",
           "automitigate/circuits.py", "automitigate/score.py", "automitigate/forward.py",
           "docs/analysis_plan.md", "docs/results.md", "docs/project_card.md"]
-GLOBS = ["data/replay/*.json", "figures/*.png", "docs/diagrams/*.png"]
+GLOBS = ["data/replay/*.json", "figures/*.png"]
 
 
 def main():

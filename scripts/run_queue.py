@@ -1,4 +1,4 @@
-"""The experiment queue. One process per laptop, started once, runs until Sunday 09:00 ET.
+"""The experiment queue. One process per laptop, started once, runs until the --until time.
 
   python -u scripts/run_queue.py --laptop ian|thomas [--until 2026-10-11T09:00] [--dry-run]
 
@@ -26,7 +26,7 @@ os.chdir(ROOT)
 PY = sys.executable
 DATA = ROOT / "data"
 QDIR = DATA / "queue"
-STATUS = ROOT / "STATUS.md"
+STATUS = ROOT / "docs" / "worklog.md"
 
 try:
     from zoneinfo import ZoneInfo
@@ -190,9 +190,9 @@ class Queue:
     def git_sync(self, light=False):
         """Commit what the queue produced (light = heartbeat + STATUS only), pull --rebase, push."""
         if light:
-            sh(["git", "add", "-A", "STATUS.md", f"data/heartbeat_{self.laptop}.txt"], check=False)
+            sh(["git", "add", "-A", "docs/worklog.md", f"data/heartbeat_{self.laptop}.txt"], check=False)
         else:
-            sh(["git", "add", "-A", "data", "STATUS.md"], check=False)
+            sh(["git", "add", "-A", "data", "docs/worklog.md"], check=False)
             for extra in ("figures", "docs/results.md"):
                 if (ROOT / extra).exists():
                     sh(["git", "add", "-A", extra], check=False)
@@ -312,7 +312,7 @@ class Queue:
             except Exception:
                 tb = traceback.format_exc().splitlines()[-30:]
                 self.status_block(done="", blocked=f"{self.line}\n" + "\n".join(tb), nxt="retry after the next pull")
-                self.tick("blocked · see STATUS.md · sleeping 5 min")
+                self.tick("blocked · see docs/worklog.md · sleeping 5 min")
                 try:
                     self.git_sync()
                 except Exception:

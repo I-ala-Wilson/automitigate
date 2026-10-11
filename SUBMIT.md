@@ -20,7 +20,7 @@ git add README.md docs/project_card.md && git commit -m "[thomas] video link" &&
 ```
 
 ## 3. Upload the demo to your Qollab project (the one that gets published)
-1. Open your AutoMitigate project on qollab.xyz → **Code** tab → file-tree icon → drag `qollab_project.zip` (from HEAD, 8.9 MB, 54 files) onto the upload area.
+1. Open your AutoMitigate project on qollab.xyz → **Code** tab → file-tree icon → drag `qollab_project.zip` (from HEAD, 3.0 MB, 40 files) onto the upload area.
 2. Dialog "Unpack qollab_project.zip?" → **Unpack**. Dialog "Erase existing files first?" → **Erase first** → **Delete and upload**. Wait for "Saved".
 3. **Run Project** → **Run** → in the Select QPU dialog leave Built-in simulator → **Run**. Expect in about 4 s: the regret table, `figure.svg`, and three lines starting `Live run on basic_simulator`.
 4. Press **Run** again → QPU dialog → expand **IBM** → **Fez** → **Run**. Expect about 13 s, then `raw = 0.8x, after readout mitigation = 0.9x, ideal = 1.000`. That is the run a judge will see.
@@ -46,11 +46,11 @@ Hackathon submission form. Fields you will need:
 - Video: the YouTube URL from step 1
 - Team: Ian Wilson, Thomas Sebahi (McGill University)
 - Theme: Quantum Impact
-- One-line description: `A bandit that auto-tunes quantum error-mitigation settings per circuit, per machine, per hour, using a mirror-circuit reward that needs no ideal answer.`
+- One-line description: `A bandit that chooses which error-mitigation settings to use on a quantum computer, per circuit and per machine, from a mirror-circuit score that needs no ideal answer.`
 After submitting, screenshot the confirmation and commit it as `docs/submission_confirmation.png` with message `[thomas] submitted`.
 
 ## What is already verified (no need to redo)
 - Demo bundle runs on Qollab's built-in simulator, IBM Fez simulator and IonQ Aria-1 simulator (tested Saturday night and Sunday on Ian's scratch project).
-- Fresh clone + `pip install -e ".[sweep,dev]"` + `pytest -q`: 37 tests pass (Saturday 22:50).
+- Fresh clone + `pip install -e ".[sweep,dev]"` + `pytest -q`: 39 tests pass.
 - README, `docs/results.md`, `docs/project_card.md`, `docs/analysis_plan.md`, `docs/related_work.md` are final.
-- No AI attribution anywhere in the repo or commits; the disclosure sentence lives only in the project card and README Disclosure section. Keep it that way: commit messages are `[thomas] …`, nothing else.
+- Commit messages are `[thomas] …`. After submitting, delete this file (`git rm SUBMIT.md`, commit `[thomas] submitted`).

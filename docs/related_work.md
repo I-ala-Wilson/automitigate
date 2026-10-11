@@ -1,8 +1,5 @@
 # Related work
 
-<!-- Drafted Fri night from the pre-window reading; the Sunday 12:00 arXiv re-check adds anything
-     new under "Re-check" at the bottom. One line per paper on what they did and what differs here. -->
-
 ## Bandits over error mitigation (2026)
 
 - **CMAB-ZNE, arXiv 2608.06426.** A contextual bandit chooses among zero-noise-extrapolation fold sets. Arms are fold sets only; drift is synthetic; the reward needs a known answer. Here: three real techniques as arms (ZNE, Pauli twirling, readout mitigation), a mirror-circuit reward that needs no ideal answer, and nine months of real calibration drift.
@@ -29,7 +26,7 @@ None of the three evaluates non-stationary learners under real device drift; tha
 - **arXiv 2609.38713.** Reports ZNE hurting on most runs on ibm_marrakesh. The two together are the open contradiction this replay speaks to: whether the *best mitigation setting* moves, not just the raw fidelity.
 - **Calibration data:** `phanerozoic/qiskit-calibration-drift` (Hugging Face, CC-BY-4.0, revision 56f55fb8), ibm_fez, Jan 31 to Oct 9 2026, 241 observed days.
 
-## Re-check (Sunday 12:00)
+## Re-check (11 October 2026)
 
 Queries run 2026-10-11 11:35 ET on arXiv: "bandit quantum error mitigation selection", "mirror circuit reward adaptive error mitigation drift calibration", "non-stationary bandit quantum device drift mitigation". Already covered above: CMAB-ZNE (2608.06426), GSC-QEMit (2604.24551). New hits:
 

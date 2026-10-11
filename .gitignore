@@ -12,7 +12,11 @@ figures/*.pdf
 .DS_Store
 node_modules/
 logs/
-data/ibm/*_seed*.jsonl
+data/ibm/*.jsonl
+data/heartbeat_*.txt
+data/queue/
+CLAUDE.md
+.claude/
 data/ionq_like/*.jsonl
 data/calib/*.jsonl
 qollab_project/

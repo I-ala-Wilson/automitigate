@@ -1,7 +1,7 @@
 """E0 checks for Qollab, ONE circuit per Run (Qollab's IonQ simulator accepts one circuit per job
 and one job per code run).
 
-Thomas, by hand, 7 Runs of about a minute each:
+By hand, 7 Runs of about a minute each:
   1. set RUN = 1 below, press Run, copy the single line that starts with {"run": into the file
      data/e0_runs.jsonl in the repo (one line per Run, append).
   2. set RUN = 2, Run, copy the line. Repeat up to RUN = 7.
