@@ -503,3 +503,9 @@ done: arXiv re-check (three queries) added to docs/related_work.md: QBalance 260
 blocked: none
 next: video link into README + card when Ian sends it; Thomas 14:30 upload (zip from HEAD), 16:00 Publish, 17:00 Submit.
 needs-other-side: Thomas: README review + project card not seen in the repo yet as of 11:40.
+
+## 2026-10-11 16:00 ET  [ian]
+done: video kit committed to docs/video/ (16 slides in the diagram style, SCRIPT.md v4 in Ian's voice, CUES.md, generator + sources, HANDOFF.md). Ian's connection is too poor to assemble the video; Thomas finishes it from docs/video/HANDOFF.md.
+blocked: none
+next: Thomas: assemble + upload the video (HANDOFF.md), link into README + card; 14:30 zip upload if not done; 16:00 Publish; 17:00 Submit.
+needs-other-side: Thomas: everything in docs/video/HANDOFF.md.
