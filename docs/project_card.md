@@ -1,6 +1,6 @@
 # AutoMitigate
 
-Demo video: https://www.youtube.com/watch?v=gv-lP-Qzrl8 · Code: https://github.com/I-ala-Wilson/automitigate
+Demo video: https://www.youtube.com/watch?v=gv-lP-Qzrl8 · Code: https://github.com/I-ala-Wilson/automitigate · Qollab project: https://qollab.xyz/u/S0cra13s/quantum-automitigation
 
 **A bandit that learns which error-mitigation settings to use for your circuit, and notices when the device changes.**
 
