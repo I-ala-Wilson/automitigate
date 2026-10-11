@@ -8,8 +8,8 @@ gate after every CX (so no adjacent inverse pairs), and the whole thing walks a 
 state, so the correct outcome is known exactly and the decay of P(target) with the number
 of CX gates gives the per-gate error.
 
-Thomas, by hand, 4 Runs on the IonQ Aria-1 noise-model simulator: set RUN = 1, press Run,
-append the printed {"run": ...} line to data/e0_runs.jsonl (delete the old file first),
+Four Runs on the IonQ Aria-1 noise-model simulator: set RUN = 1 in the Run-settings form, press
+Run, append the printed {"run": ...} line to data/e0_runs.jsonl (delete the old file first),
 then RUN = 2, 3, 4. Commit `[thomas] e0 ladder runs`, push. scripts/fit_e0.py does the rest.
 """
 import json
@@ -17,7 +17,6 @@ import time
 
 from qiskit import QuantumCircuit
 
-RUN = 1  # <-- change to 1, 2, 3, 4 and press Run each time
 SHOTS = 1200
 PAIRS = [(0, 1), (1, 2), (2, 3), (3, 0)]
 
@@ -54,7 +53,8 @@ def circuit_for(run):
     raise ValueError("RUN must be 1..4")
 
 
-def main():
+def main(RUN: int = 1):
+    """RUN is a field in the Run-settings form: 1, 2, 3, 4."""
     label, qc, target = circuit_for(RUN)
     qc = qc.copy()
     qc.measure_all()

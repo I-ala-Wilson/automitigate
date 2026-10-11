@@ -91,7 +91,7 @@ On your own circuit and backend: `automitigate.arms.transpile_once` then `apply_
 7. Qollab's IonQ simulator is itself a model of the device.
 8. Daily snapshots, last value carried forward: sub-daily recalibrations are not resolved.
 9. The dynamic oracle uses seed-mean rewards, an unattainable reference.
-10. Qollab's compiler cancels mirror and folded structure on every backend we tested (identity chains of 40–66 gates return P ≈ 1 even with barriers), so ZNE and mirror scoring cannot be executed through Qollab; the IonQ-like constants are therefore published-figure defaults, not fitted, and the spot check is informative only where injected errors survive compilation.
+10. Qollab's compiler cancels mirror and folded structure on every backend we tested (identity chains of 40–66 gates return P ≈ 1 even with barriers), and on the Aria-1 noise-model simulator even a non-cancellable 4-qubit Clifford ladder of 36 CX gates returns exactly P = 1 (`data/e0_runs.jsonl`, job IDs inside), so neither ZNE nor mirror scoring nor a two-qubit error fit can be executed through Qollab; the IonQ-like constants are therefore published-figure defaults, not fitted, and the spot check is informative only where injected errors survive compilation.
 
 ## Replicate the tables
 
@@ -117,7 +117,7 @@ python scripts/analysis.py all --final && python scripts/export_replay.py
 ## Data and disclosures
 
 - Drift study: IBM calibration time series `phanerozoic/qiskit-calibration-drift` (ibm_fez, Jan 31 → Oct 9 2026, 241 observed days, CC-BY-4.0; revision 56f55fb8 pinned in `automitigate/noise_model.py`; the CC-BY-NC `SN` column is never loaded), replayed through Qiskit Aer noise models rebuilt per day by last-value-carried-forward. Aer sweeps ran locally on two laptops.
-- IonQ-like table: Qiskit Aer with depolarising constants at published Aria-1 figures (p1 = 5·10⁻⁴, p2 = 6·10⁻³, readout 4·10⁻³). The planned fit of those constants from Qollab's Aria-1 simulator (`qollab/e0_single.py`, `data/e0.json`) could not be completed because the simulator's compiler cancels the identity and mirror chains the fit relies on; `qollab/e0_ladder.py` is the compiler-proof replacement. The spot check against that simulator is in `data/ionq/spot_check.json` with job IDs.
+- IonQ-like table: Qiskit Aer with depolarising constants at published Aria-1 figures (p1 = 5·10⁻⁴, p2 = 6·10⁻³, readout 4·10⁻³). The planned fit of those constants from Qollab's Aria-1 simulator could not be completed: identity and mirror chains are cancelled by its compiler (`qollab/e0_single.py`), and the non-cancellable CX ladders of `qollab/e0_ladder.py` (12 and 36 CX, four runs, `data/e0_runs.jsonl`) also return exactly P = 1, while the readout runs give a per-qubit flip of about 6·10⁻⁴ for |1⟩ and 0 for |0⟩. The constants therefore stay at the published figures. The spot check against that simulator is in `data/ionq/spot_check.json` with job IDs.
 - Qollab's IonQ simulators are noise-model simulators run by Qollab; IonQ gives no accuracy guarantee for them.
 - Built in the hackathon window. The plan, the empty repository skeleton (packaging, CI, README template) and the explainer diagrams were prepared before the window and are the only pre-window material. AI coding assistants were used during development.
 - Libraries: Qiskit, Qiskit Aer, NumPy, SciPy, pandas, Matplotlib, scikit-learn.

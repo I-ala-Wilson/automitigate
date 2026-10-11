@@ -479,3 +479,9 @@ done: README written in full (headline table from docs/results.md, how it works,
 blocked: none
 next: Ian records the two Qollab clips (IBM Fez selected) and cuts the video; Sunday 09:00 final regenerate + zip; video and project links go into the README placeholders at the top.
 needs-other-side: Thomas: README review + Qollab project card (paste docs/project_card.md); Sunday schedule unchanged.
+
+## 2026-10-10 23:10 ET  [ian]
+done: E0 v3 ladder runs done from Ian's account (probe draft project, IonQ Aria-1 noise-model simulator, 1200 shots): ro0000 P = 1.0, ro1111 P = 0.9975, ladder 12 CX P = 1.0, ladder 36 CX P = 1.0 (data/e0_runs.jsonl, job IDs inside). The simulator applies no visible two-qubit error to a 4-qubit Clifford ladder, so no p2 fit is possible; IonQ-like constants stay at defaults, IonQ-like table NOT rerun (decision closed). Readout from ro1111: ~6e-4 per-qubit flip for |1>, 0 for |0>. e0_ladder.py's RUN is now a Run-settings field. Fresh-clone check done tonight: new venv, pip install -e ".[sweep,dev]", 37 tests pass, replay runs. README threat 10 and disclosure updated.
+blocked: none
+next: Ian's video; Sunday 09:00 final regenerate + zip (no table changes expected); Thomas Sunday: README review, card, 14:30 upload, 16:00 Publish, 17:00 Submit. Thomas's optional 11:00 ladder runs and 12:00 fresh-clone check are no longer needed.
+needs-other-side: Thomas: README review + project card tonight.
