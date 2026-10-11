@@ -53,7 +53,7 @@ Everything is simulation: the drift replay is a noise model rebuilt from calibra
 
 ## Disclosure
 
-This effort is supported by Qollab & IonQ. AI coding assistants were used during development; the plan, the empty repository skeleton (packaging, CI, README template) and the explainer diagrams were prepared before the window and are the only pre-window material. Aer sweeps ran locally on two laptops; the IBM calibration data is `phanerozoic/qiskit-calibration-drift` (CC-BY-4.0, revision 56f55fb8; its CC-BY-NC `SN` column was never loaded); IonQ-simulator runs on Qollab are listed with job IDs in `data/ionq/spot_check.json` and `data/e0_runs.jsonl`. Libraries: Qiskit, Qiskit Aer, NumPy, SciPy, pandas, Matplotlib, scikit-learn.
+This effort is supported by Qollab & IonQ. AI coding assistants were used during development; the plan and the empty repository skeleton (packaging, CI, README template) were prepared before the window and are the only pre-window material. Aer sweeps ran locally on two laptops; the IBM calibration data is `phanerozoic/qiskit-calibration-drift` (CC-BY-4.0, revision 56f55fb8; its CC-BY-NC `SN` column was never loaded); IonQ-simulator runs on Qollab are listed with job IDs in `data/ionq/spot_check.json` and `data/e0_runs.jsonl`. Libraries: Qiskit, Qiskit Aer, NumPy, SciPy, pandas, Matplotlib, scikit-learn.
 
 ## Accessibility
 
