@@ -473,3 +473,9 @@ done: probe on Qollab's IBM Fez noise-model simulator (throwaway draft project, 
 blocked: none
 next: upload the rebuilt zip to the scratch project, verify on Built-in and on IBM Fez (time it); Ian re-records the two Qollab clips with IBM -> Fez selected; Sunday 09:00 final regenerate + zip.
 needs-other-side: Thomas: README and project card still untouched as of 20:50; Sunday 14:30 re-upload uses the zip built after this commit.
+
+## 2026-10-10 21:40 ET  [ian]
+done: README written in full (headline table from docs/results.md, how it works, Qollab + local run instructions incl. the new live run, threats 1–10, replication commands, extend-it, disclosures, related work). Thomas: review and edit, do not start from the template.
+blocked: none
+next: Ian records the two Qollab clips (IBM Fez selected) and cuts the video; Sunday 09:00 final regenerate + zip; video and project links go into the README placeholders at the top.
+needs-other-side: Thomas: README review + Qollab project card (paste docs/project_card.md); Sunday schedule unchanged.
