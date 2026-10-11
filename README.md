@@ -4,7 +4,7 @@ A bandit that chooses which error-mitigation settings to use on a quantum comput
 
 Qollab + IonQ Global Quantum Hackathon, 9 to 11 October 2026. MIT License. This effort is supported by Qollab & IonQ.
 
-Demo video: https://www.youtube.com/watch?v=gv-lP-Qzrl8 · Qollab project: *(link added at publish)* · Pre-registered analysis plan: [docs/analysis_plan.md](docs/analysis_plan.md)
+Demo video: https://www.youtube.com/watch?v=gv-lP-Qzrl8 · Qollab project: https://qollab.xyz/u/S0cra13s/quantum-automitigation · Pre-registered analysis plan: [docs/analysis_plan.md](docs/analysis_plan.md)
 
 ![eps-greedy against fixed policies on ghz8, 240 days of real ibm_fez calibration drift](figures/regret_ghz8.png)
 
