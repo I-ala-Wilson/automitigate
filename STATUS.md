@@ -509,3 +509,9 @@ done: video kit committed to docs/video/ (16 slides in the diagram style, SCRIPT
 blocked: none
 next: Thomas: assemble + upload the video (HANDOFF.md), link into README + card; 14:30 zip upload if not done; 16:00 Publish; 17:00 Submit.
 needs-other-side: Thomas: everything in docs/video/HANDOFF.md.
+
+## 2026-10-11 16:25 ET  [ian]
+done: SUBMIT.md at the repo root = Thomas's complete ordered checklist (video, links, zip upload with exact clicks, project card, Publish, incognito check, Submit form fields, fallbacks). Video kit now 17 slides (added regret curves for all five circuits), script v4 (507 words), cues rebuilt, visual check done on all slides. Ian offline from ~16:20.
+blocked: none
+next: Thomas follows SUBMIT.md top to bottom.
+needs-other-side: everything in SUBMIT.md.

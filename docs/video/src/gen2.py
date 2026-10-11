@@ -70,6 +70,7 @@ s["10-best-arm"]=P("Every day the same arm", '<div style="display:grid;grid-temp
 rows="".join(f"<tr><td>{c}</td><td>{e}</td><td>{a7}</td><td><b>{p}</b></td></tr>" for c,e,a7,p in [("ghz4","1.60","4.46","64 %"),("ghz8","3.26","11.47","72 %"),("grover3","3.08","14.87","79 %"),("qaoa6","3.19","13.73","77 %"),("qft3","2.16","3.96","45 %")])
 s["11-regret-table"]=P("Finding that setting cheaply", f'''<div style="display:flex;gap:18px;margin-top:40px"><div class="card" style="flex:1;text-align:center;padding:60px 30px"><div class="k">45–79 %</div><div class="kl">less regret than switching everything on</div></div><div class="card" style="flex:1.3"><table style="font-size:24px;width:100%"><tr><th>circuit</th><th>ε-greedy learner</th><th>everything switched on (arm 7)</th><th>learner is lower by</th></tr>{rows}</table>
 <p style="margin-top:14px">regret = score lost vs always picking the best arm, over 240 days. Lower is better.</p></div></div>{foot("11 of 16")}''')
+s["11b-all-circuits"]=P("The same on every circuit", '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:20px">'+"".join(f'<div class="frame" style="padding:6px"><img src="file://{REPO}/figures/regret_{c}.png" style="width:470px;display:block"></div>' for c in ["ghz4","ghz8","grover3","qaoa6","qft3"])+'<div class="card" style="padding:18px"><p>Cumulative regret, 240 days. Thick line = ε-greedy. Dashed = everything switched on. The learner is lowest on all five.</p></div></div>'+foot(""), "")
 s["12-proxy"]=P("Is the score honest?", framed(f"{REPO}/figures/proxy_per_day.png", 800, 1500, fw=1160)+foot("12 of 16"), "Rank agreement between the mirror score and the real error, per day.")
 s["13-ionq"]=P("A different machine", framed(f"{H}/shots/chart_1.png", 760, 1500)+foot("13 of 16"), "IonQ-like model, noise jumps at step 150. Everything-on stays best; the gap is the cost of checking.")
 s["14-spot-check"]=P("Checked against Qollab's Aria-1 simulator", f'''<div style="display:flex;gap:18px;margin-top:60px">
@@ -83,5 +84,5 @@ s["16-end"]=page("", f'''<div class="content"><div><div style="font-size:88px;fo
 <div class="chip" style="margin-top:30px;font-size:18px">github.com/I-ala-Wilson/automitigate</div>
 <div style="font-size:22px;margin-top:26px">MIT licence · pip install -e . · every number reproducible from the committed tables</div>
 <div style="font-size:22px;margin-top:60px">Ian Wilson · Thomas Sebahi · McGill University</div></div></div>{foot("16 of 16")}''')
-for k,v in s.items(): open(f"{H}/{k[:2]}.html","w").write(v)
+for i,(k,v) in enumerate(s.items(),1): open(f"{H}/{i:02d}.html","w").write(v)
 print(len(s),"slides written")

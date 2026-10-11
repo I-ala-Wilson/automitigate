@@ -1,6 +1,6 @@
-# AutoMitigate, demo video script (v4)
+# AutoMitigate, demo video script (v4, 17 slides)
 
-One continuous explanation. The number in brackets is the slide on screen when you reach that line; CUES.md has the timings. About 2 minutes 50 seconds at a normal pace. If a take runs long, drop slide 14's line first, then the last sentence of slide 3.
+One continuous explanation. The number in brackets is the slide on screen when you reach that line; CUES.md has the timings. About 2 minutes 50 seconds at a normal pace. If a take runs long, drop slide 15's line first, then the last sentence of slide 3.
 
 **[1]**
 
@@ -8,11 +8,11 @@ This is AutoMitigate. It decides which error-mitigation settings to use on a qua
 
 **[2]**
 
-It exists because quantum computers are still noisy. Every answer comes back slightly wrong, so you have to clean it up, and there are three standard ways. Run at deliberately higher noise and extrapolate back to zero, wrap each two-qubit gate in random Pauli flips so the systematic errors cancel, or measure the detector's bias and subtract it.
+It exists because quantum computers are still noisy, every answer comes back slightly wrong, and there are three standard ways to clean it up. Run at deliberately higher noise and extrapolate back to zero, wrap each two-qubit gate in random Pauli flips, or measure the detector's bias and subtract it.
 
 **[3]**
 
-The trouble is that none of them is free and none always helps. Each costs extra runs, each suits some circuits and not others, and the errors they fight are not constant. Here is our qubits' two-qubit error over nine months, jumping at every recalibration. So the right combination depends on your circuit, your machine, and the day.
+The trouble is that none of them is free and none always helps, and the errors they fight are not even constant. Here is our qubits' error over nine months, jumping at every recalibration. So the right combination depends on your circuit, your machine, and the day.
 
 **[4]**
 
@@ -48,20 +48,24 @@ The bandit's job is then to find that setting cheaply, and epsilon-greedy does, 
 
 **[12]**
 
-The obvious doubt is whether a mirror score tracks your real circuit, so we checked day by day. Its ranking of the arms matches the true error at 0.6 to 0.9.
+The same on all five circuits: the learner sits well below everything-on.
 
 **[13]**
 
-On an IonQ-style model where the noise jumps halfway, the best setting still does not move, so the gap is just the cost of checking.
+The obvious doubt is whether a mirror score tracks your real circuit, so we checked day by day. Its ranking of the arms matches the true error at 0.6 to 0.9.
 
 **[14]**
 
-The model itself agrees with Qollab's Aria-1 simulator.
+On an IonQ-style model where the noise jumps halfway, the best setting still does not move, so the gap is just the cost of checking.
 
 **[15]**
 
-The caveat is that this held on good qubits. On a middling chain the best setting did drift, nine switches in nine months, so tracking matters where the hardware is worse.
+The model itself agrees with Qollab's Aria-1 simulator.
 
 **[16]**
 
-Everything is open source under MIT and installs with pip. Thomas Sebahi and I built it this weekend at McGill. Thanks for watching.
+The caveat is that this held on good qubits. On a middling chain the best setting did drift, nine switches in nine months, so tracking matters where the hardware is worse.
+
+**[17]**
+
+Everything is open source under MIT and installs with pip. Thomas Sebahi and I built it this weekend at McGill.
