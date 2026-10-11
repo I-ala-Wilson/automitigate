@@ -1,26 +1,26 @@
-# AutoMitigate, demo video script (v3)
+# AutoMitigate, demo video script (v4)
 
-Read it as one explanation, not sixteen captions. The number in brackets is the slide on screen when you reach that line; CUES.md has the timings. About 2 minutes 50 seconds at a normal pace; if a take runs long, drop slide 14's line first.
+One continuous explanation. The number in brackets is the slide on screen when you reach that line; CUES.md has the timings. About 2 minutes 50 seconds at a normal pace. If a take runs long, drop slide 14's line first, then the last sentence of slide 3.
 
 **[1]**
 
-This is AutoMitigate. It picks your error-mitigation settings for you.
+This is AutoMitigate. It decides which error-mitigation settings to use on a quantum computer, and it learns that choice from the machine itself.
 
 **[2]**
 
-A quantum computer gives you a slightly wrong answer, and three tricks clean it up. Run at higher noise and extrapolate back, wrap each two-qubit gate in random Pauli flips, or measure the detector's bias and subtract it.
+It exists because quantum computers are still noisy. Every answer comes back slightly wrong, so you have to clean it up, and there are three standard ways. Run at deliberately higher noise and extrapolate back to zero, wrap each two-qubit gate in random Pauli flips so the systematic errors cancel, or measure the detector's bias and subtract it.
 
 **[3]**
 
-Each helps some circuits and hurts others, and the error they fight is not constant. This is the two-qubit error on our qubits over nine months, jumping at every recalibration. So the right choice keeps changing.
+The trouble is that none of them is free and none always helps. Each costs extra runs, each suits some circuits and not others, and the errors they fight are not constant. Here is our qubits' two-qubit error over nine months, jumping at every recalibration. So the right combination depends on your circuit, your machine, and the day.
 
 **[4]**
 
-So we made the computer choose, as a bandit, the same maths as A/B testing. Eight arms, one per combination of the tricks. Pull, score, update, repeat, until it settles on the best.
+Which is why we made the computer choose. We treat it as a bandit, the same maths behind A/B testing. Eight arms, one per combination of the three tricks. Pull one, score it, update, repeat, until it settles on the arm that keeps scoring best.
 
 **[5]**
 
-The scoring is what I like most. We run the circuit, scramble it with random Paulis, then run it backwards, so the right answer is one bitstring we already know, and the score is how often it comes out. No ideal simulation, so it works on circuits whose answer nobody knows.
+The scoring is the part I like most. We run the circuit, scramble it with random Paulis, then run it backwards, so the right answer is one bitstring we already know, and the score is how often it comes out. No ideal simulation, so it works on circuits whose answer nobody knows.
 
 **[6]**
 
@@ -36,11 +36,11 @@ Then the circuit runs for real on the simulator you chose, raw and with readout 
 
 **[9]**
 
-We pre-registered the analysis, and across 240 days the best setting never changed. A tracker that knew the right arm every day would gain under a hundredth of a percent over picking once.
+We pre-registered the analysis, and across 240 days the best setting never changed. A perfect tracker would gain under a hundredth of a percent over picking once.
 
 **[10]**
 
-ZNE with readout mitigation won every day, so picking once is as good as tracking.
+ZNE with readout mitigation won every day on every circuit, so picking once is as good as tracking.
 
 **[11]**
 
@@ -48,7 +48,7 @@ The bandit's job is then to find that setting cheaply, and epsilon-greedy does, 
 
 **[12]**
 
-The obvious doubt is whether a mirror score tracks your real circuit, so we checked day by day. Its ranking of the arms matches the true error at 0.6 to 0.9, and its pick costs at most 8 percent of the worst arm.
+The obvious doubt is whether a mirror score tracks your real circuit, so we checked day by day. Its ranking of the arms matches the true error at 0.6 to 0.9.
 
 **[13]**
 
@@ -64,4 +64,4 @@ The caveat is that this held on good qubits. On a middling chain the best settin
 
 **[16]**
 
-It is open source under MIT and installs with pip. Thomas Sebahi and I built it this weekend at McGill. Thanks for watching.
+Everything is open source under MIT and installs with pip. Thomas Sebahi and I built it this weekend at McGill. Thanks for watching.
